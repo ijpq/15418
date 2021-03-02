@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <pthread.h>
+#include <time.h>
 
 // Use this code to time your threads
 #include "CycleTimer.h"
@@ -118,14 +119,15 @@ typedef struct {
 // Thread entrypoint.
 void* workerThreadStart(void* threadArgs) {
 
+    clock_t startTimer = clock();
     WorkerArgs* args = static_cast<WorkerArgs*>(threadArgs);
 
     // TODO: Implement worker thread here.
     int startRow, endRow;
+    int remain_height = args->height%args->numThreads;
     int height_in_thread = args->height/args->numThreads;
     startRow = (args->threadId)*height_in_thread;
-    endRow = startRow + height_in_thread;
-
+    endRow = startRow +height_in_thread +remain_height;
     mandelbrotSerial(args->x0,\
                      args->y0,\
                      args->x1,\
@@ -136,12 +138,10 @@ void* workerThreadStart(void* threadArgs) {
                      endRow,\
                      args->maxIterations,\
                      args->output);
-    
-                     
-
 
     printf("Hello world from thread %d\n", args->threadId);
-
+    clock_t endTimer = clock();
+    printf("thread %d takes %lf\n", args->threadId, ((double)(endTimer-startTimer))/CLOCKS_PER_SEC);
     return NULL;
 }
 
