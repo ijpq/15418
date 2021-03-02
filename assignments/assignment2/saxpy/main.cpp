@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <getopt.h>
 #include <string>
+#include <time.h>
 
 void saxpyCuda(int N, float alpha, float* x, float* y, float* result);
 void printCudaInfo();
