@@ -13,6 +13,22 @@
 
 extern float toBW(int bytes, float sec);
 
+#define DEBUG
+
+#ifdef DEBUG
+#define cudaCheckError(ans) { cudaAssert((ans), __FILE__, __LINE__); }
+inline void cudaAssert(cudaError_t code, const char *file, int line, bool abort=true)
+{
+   if (code != cudaSuccess) 
+   {
+      fprintf(stderr, "CUDA Error: %s at %s:%d\n", 
+        cudaGetErrorString(code), file, line);
+      if (abort) exit(code);
+   }
+}
+#else
+#define cudaCheckError(ans) ans
+#endif
 
 /* Helper function to round up to a power of 2. 
  */
@@ -28,6 +44,35 @@ static inline int nextPow2(int n)
     return n;
 }
 
+__global__
+void exclusive_scan_kernel(int *start, int *end) {
+    int arr_length = end-start;
+    unsigned int tid = threadIdx.x;
+    unsigned int global_tid = blockIdx.x * blockDim.x + threadIdx.x;
+    int *idata = start + blockIdx.x * blockDim.x;
+    if (global_tid >= arr_length)
+        return;
+
+    for (int stride = 1; stride < blockDim.x; stride *= 2) {
+        int ss = stride*2;
+        if((tid % ss) == ss-1) {
+            idata[tid] += idata[tid-stride];
+        }
+    }
+    idata[blockDim.x-1] = 0;
+    for (int stride = blockDim.x/2; stride >= 1; stride /=2) {
+        int ss =stride*2;
+        for (int i =0; i <blockDim.x;i+=ss) {
+            int t = idata[i+stride-1];
+            idata[i+stride-1] = idata[i+ss-1];
+            idata[i+ss-1] +=t;
+        }
+    }
+
+    
+    
+}
+
 void exclusive_scan(int* device_start, int length, int* device_result)
 {
     /* Fill in this function with your exclusive scan implementation.
@@ -39,6 +84,12 @@ void exclusive_scan(int* device_start, int length, int* device_result)
      * both the input and the output arrays are sized to accommodate the next
      * power of 2 larger than the input.
      */
+    unsigned int warp_size = 32;
+    unsigned int block_size = 512 > length? ((length+warp_size-1)/warp_size)*warp_size:length;
+    dim3 block(block_size, 1);
+    dim3 grid((size+block.x-1)/block.x, 1);
+    exclusive_scan_kernel<<<grid, block>>>(device_start, device_start+length/2);
+    cudaCheckError(cudaMemcpy(device_result, device_start, length/2, cudaDeviceToDevice););
 }
 
 /* This function is a wrapper around the code you will write - it copies the
@@ -125,6 +176,7 @@ int find_repeats(int *device_input, int length, int *device_output) {
      * it requires that. However, you must ensure that the results of
      * find_repeats are correct given the original length.
      */    
+
     return 0;
 }
 
