@@ -79,9 +79,57 @@ void clampedExpSerial(float* values, int* exponents, float* output, int N) {
     }
 }
 
+__cmu418_mask _my_int_to_mask(__cmu418_vec_int &src, __cmu418_mask mask) {
+    __cmu418_mask ret_mask = _cmu418_init_ones(0);
+    for (int i =0 ; i < VECTOR_WIDTH; i++) {
+        ret_mask.value[i] = mask.value[i] ? src.value[i]: ret_mask.value[i];
+    }
+    return ret_mask;
+}
+
 void clampedExpVector(float* values, int* exponents, float* output, int N) {
     // Implement your vectorized version of clampedExpSerial here
     //  ...
+    //
+    __cmu418_vec_float x, xpower, result; // define x, xpower, result, \
+    initialization at below even if it is not recommended.
+    __cmu418_vec_int zero = _cmu418_vset_int(0);
+    __cmu418_vec_int y; // define y
+    __cmu418_mask maskAll = _cmu418_init_ones();
+    __cmu418_vec_int Allones  = _cmu418_vset_int(1);
+    __cmu418_mask mask_true = _cmu418_init_ones(0);
+    __cmu418_vec_int int_lowest_bit = _cmu418_vset_int(0);
+    __cmu418_mask mask_lowest_bit;
+    __cmu418_vec_float thr = _cmu418_vset_float(4.18f);
+    __cmu418_mask remainder_mask;
+    if (N % VECTOR_WIDTH) {
+        remainder_mask = _cmu418_init_ones(N % VECTOR_WIDTH);
+    }
+    for (int i = 0; i < N; i += VECTOR_WIDTH) {
+        // get a mask when N cannot be divided by vec_width
+        if (i+VECTOR_WIDTH > N) {
+            maskAll = _cmu418_mask_and(maskAll, remainder_mask);   
+        }
+        _cmu418_vload_float(x, values+i, maskAll); // x = values[i]
+        result = _cmu418_vset_float(1.f); // result = 1.f
+        _cmu418_vload_int(y, exponents+i, maskAll); // y = exponents[i]
+        _cmu418_vmove_float(xpower, x, maskAll); // xpower = x
+        while (1) { 
+            // while (y > 0)
+            _cmu418_vgt_int(mask_true, y, zero, maskAll);
+            if(!_cmu418_cntbits(mask_true)) break;
+
+            _cmu418_vbitand_int(int_lowest_bit, y, Allones, mask_true); // y & 0x01
+            mask_lowest_bit = _my_int_to_mask(int_lowest_bit, mask_true);
+            _cmu418_vmult_float(result, result, xpower, mask_lowest_bit); // result *= xpower
+            _cmu418_vmult_float(xpower, xpower, xpower, mask_true); // xpower = xpower * xpower
+            _cmu418_vshiftright_int(y, y, Allones, mask_true); // y >>= 1;
+        }
+        _cmu418_vgt_float(mask_true, result, thr, maskAll); 
+        _cmu418_vset_float(result, 4.18f, mask_true);
+        _cmu418_vstore_float(output+i, result, maskAll);
+    }
+    return ;
 }
 
 

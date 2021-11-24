@@ -32,9 +32,9 @@ Array	ispc-v1.16.1-linux/include/ispcrt/ispcrt.hpp	/^    inline Array<T,AT>::Arr
 Array	ispc-v1.16.1-linux/include/ispcrt/ispcrt.hpp	/^    inline Array<T,AT>::Array(const Device &device, std::vector<T, ALLOC_T> &v, EnableForDeviceAllocation<alloc>)$/;"	f	class:ispcrt::Array
 Array	ispc-v1.16.1-linux/include/ispcrt/ispcrt.hpp	/^template <typename T, AllocType AT = AllocType::Device> class Array : public GenericObject<ISPCRTMemoryView> {$/;"	c	namespace:ispcrt
 BBoxIntersect	ispc-v1.16.1-linux/examples/cpu/rt/rt_serial.cpp	/^static inline bool BBoxIntersect(const float bounds[2][3], const Ray &ray) {$/;"	f	file:
-BIG_LITTLE	assignments/assignment2/render/circleRenderer.h	/^    BIG_LITTLE,$/;"	e	enum:__anon1
+BIG_LITTLE	assignments/assignment2/render/circleRenderer.h	/^    BIG_LITTLE,$/;"	e	enum:__anon3
 BINOMIAL_NUM	ispc-v1.16.1-linux/examples/cpu/options/options_defs.h	37;"	d
-BOUNCING_BALLS	assignments/assignment2/render/circleRenderer.h	/^    BOUNCING_BALLS, $/;"	e	enum:__anon1
+BOUNCING_BALLS	assignments/assignment2/render/circleRenderer.h	/^    BOUNCING_BALLS, $/;"	e	enum:__anon3
 BVHIntersect	ispc-v1.16.1-linux/examples/cpu/rt/rt_serial.cpp	/^bool BVHIntersect(const LinearBVHNode nodes[], const Triangle tris[], Ray &r) {$/;"	f
 CALLINGCONV	ispc-v1.16.1-linux/examples/cpu/perfbench/perfbench.cpp	51;"	d	file:
 CALLINGCONV	ispc-v1.16.1-linux/examples/cpu/perfbench/perfbench.cpp	53;"	d	file:
@@ -43,10 +43,10 @@ CALLINGCONV	ispc-v1.16.1-linux/examples/cpu/perfbench/perfbench_serial.cpp	43;"	
 CC_FILES	assignments/assignment2/render/Makefile	/^CC_FILES   := main.cpp display.cpp benchmark.cpp refRenderer.cpp \\$/;"	m
 CC_FILES	assignments/assignment2/saxpy/Makefile	/^CC_FILES   := main.cpp$/;"	m
 CC_FILES	assignments/assignment2/scan/Makefile	/^CC_FILES   := main.cpp$/;"	m
-CIRCLE_RGB	assignments/assignment2/render/circleRenderer.h	/^    CIRCLE_RGB,$/;"	e	enum:__anon1
-CIRCLE_RGBY	assignments/assignment2/render/circleRenderer.h	/^    CIRCLE_RGBY,$/;"	e	enum:__anon1
-CIRCLE_TEST_100K	assignments/assignment2/render/circleRenderer.h	/^    CIRCLE_TEST_100K,$/;"	e	enum:__anon1
-CIRCLE_TEST_10K	assignments/assignment2/render/circleRenderer.h	/^    CIRCLE_TEST_10K,$/;"	e	enum:__anon1
+CIRCLE_RGB	assignments/assignment2/render/circleRenderer.h	/^    CIRCLE_RGB,$/;"	e	enum:__anon3
+CIRCLE_RGBY	assignments/assignment2/render/circleRenderer.h	/^    CIRCLE_RGBY,$/;"	e	enum:__anon3
+CIRCLE_TEST_100K	assignments/assignment2/render/circleRenderer.h	/^    CIRCLE_TEST_100K,$/;"	e	enum:__anon3
+CIRCLE_TEST_10K	assignments/assignment2/render/circleRenderer.h	/^    CIRCLE_TEST_10K,$/;"	e	enum:__anon3
 CLAMP	assignments/assignment2/render/util.h	7;"	d
 CMU418INTRIN_H_	assignments/assignment1/prog2_vecintrin/CMU418intrin.h	5;"	d
 CMU418Logger	assignments/assignment1/prog2_vecintrin/main.cpp	/^Logger CMU418Logger;$/;"	v
@@ -89,7 +89,7 @@ CircleRenderer	assignments/assignment2/render/circleRenderer.h	/^class CircleRen
 Clamp	ispc-v1.16.1-linux/examples/cpu/noise/noise_serial.cpp	/^inline float Clamp(float v, float low, float high) { return v < low ? low : ((v > high) ? high : v); }$/;"	f
 Clamp	ispc-v1.16.1-linux/examples/cpu/volume_rendering/volume_serial.cpp	/^static inline int Clamp(int v, int low, int high) { return std::min(std::max(v, low), high); }$/;"	f	file:
 Clamp	ispc-v1.16.1-linux/examples/xpu/noise/noise_serial.cpp	/^inline float Clamp(float v, float low, float high) { return v < low ? low : ((v > high) ? high : v); }$/;"	f
-ColMajor	ispc-v1.16.1-linux/examples/xpu/sgemm/Matrix.h	/^typedef enum { RowMajor, ColMajor, Nd } storage_type_t;$/;"	e	enum:__anon10
+ColMajor	ispc-v1.16.1-linux/examples/xpu/sgemm/Matrix.h	/^typedef enum { RowMajor, ColMajor, Nd } storage_type_t;$/;"	e	enum:__anon5
 ComputeZBounds	ispc-v1.16.1-linux/examples/cpu/deferred/dynamic_c.cpp	/^static void ComputeZBounds(int tileStartX, int tileEndX, int tileStartY, int tileEndY,$/;"	f	file:
 ComputeZBoundsRow	ispc-v1.16.1-linux/examples/cpu/deferred/dynamic_c.cpp	/^static void ComputeZBoundsRow(int tileY, int tileWidth, int tileHeight, int numTilesX, int numTilesY,$/;"	f	file:
 CreateInputDataFromFile	ispc-v1.16.1-linux/examples/cpu/deferred/common.cpp	/^InputData *CreateInputDataFromFile(const char *path) {$/;"	f
@@ -100,9 +100,9 @@ CycleTimer	assignments/assignment2/render/cycleTimer.h	/^  class CycleTimer {$/;
 CycleTimer	assignments/assignment2/saxpy/CycleTimer.h	/^  class CycleTimer {$/;"	c
 CycleTimer	assignments/assignment2/scan/CycleTimer.h	/^  class CycleTimer {$/;"	c
 D	ispc-v1.16.1-linux/examples/cpu/volume_rendering/volume_serial.cpp	/^static inline float D(int x, int y, int z, int nVoxels[3], float density[]) {$/;"	f	file:
-DATA_BAD	assignments/assignment1/prog4_sqrt/main.cpp	/^typedef enum { DATA_RANDOM, DATA_GOOD, DATA_BAD } data_t;$/;"	e	enum:__anon3	file:
-DATA_GOOD	assignments/assignment1/prog4_sqrt/main.cpp	/^typedef enum { DATA_RANDOM, DATA_GOOD, DATA_BAD } data_t;$/;"	e	enum:__anon3	file:
-DATA_RANDOM	assignments/assignment1/prog4_sqrt/main.cpp	/^typedef enum { DATA_RANDOM, DATA_GOOD, DATA_BAD } data_t;$/;"	e	enum:__anon3	file:
+DATA_BAD	assignments/assignment1/prog4_sqrt/main.cpp	/^typedef enum { DATA_RANDOM, DATA_GOOD, DATA_BAD } data_t;$/;"	e	enum:__anon2	file:
+DATA_GOOD	assignments/assignment1/prog4_sqrt/main.cpp	/^typedef enum { DATA_RANDOM, DATA_GOOD, DATA_BAD } data_t;$/;"	e	enum:__anon2	file:
+DATA_RANDOM	assignments/assignment1/prog4_sqrt/main.cpp	/^typedef enum { DATA_RANDOM, DATA_GOOD, DATA_BAD } data_t;$/;"	e	enum:__anon2	file:
 DBG	assignments/assignment1/common/tasksys.cpp	114;"	d	file:
 DBG	ispc-v1.16.1-linux/examples/common/tasksys.cpp	102;"	d	file:
 DEBUG	ispc-v1.16.1-linux/examples/cpu/gmres/debug.h	42;"	d
@@ -137,7 +137,7 @@ EXECUTABLE	assignments/assignment2/scan/Makefile	/^EXECUTABLE := cudaScan$/;"	m
 EXP_MAX	assignments/assignment1/prog2_vecintrin/main.cpp	18;"	d	file:
 FILES	assignments/assignment1/Makefile	/^FILES= prog1_mandelbrot_threads\/mandelbrot.cpp \\$/;"	m
 FILES	assignments/assignment2/Makefile	/^FILES= report.pdf \\$/;"	m
-FIREWORKS	assignments/assignment2/render/circleRenderer.h	/^    FIREWORKS, $/;"	e	enum:__anon1
+FIREWORKS	assignments/assignment2/render/circleRenderer.h	/^    FIREWORKS, $/;"	e	enum:__anon3
 FRAMEWORKS	assignments/assignment2/render/Makefile	/^FRAMEWORKS :=$/;"	m
 Float32ToUnorm8	ispc-v1.16.1-linux/examples/cpu/deferred/dynamic_c.cpp	/^static inline uint8_t Float32ToUnorm8(float f) { return (uint8_t)(f * 255.0f); }$/;"	f	file:
 Floor2Int	ispc-v1.16.1-linux/examples/cpu/noise/noise_serial.cpp	/^inline int Floor2Int(float val) { return (int)floorf(val); }$/;"	f
@@ -162,7 +162,7 @@ Grad	ispc-v1.16.1-linux/examples/xpu/noise/noise_serial.cpp	/^inline float Grad(
 HEIGHT	ispc-v1.16.1-linux/examples/xpu/noise/noise.cpp	57;"	d	file:
 HETER	ispc-v1.16.1-linux/examples/xpu/common/share.h	26;"	d
 HOSTNAME	assignments/assignment2/render/Makefile	/^HOSTNAME=$(shell hostname)$/;"	m
-HYPNOSIS	assignments/assignment2/render/circleRenderer.h	/^    HYPNOSIS, $/;"	e	enum:__anon1
+HYPNOSIS	assignments/assignment2/render/circleRenderer.h	/^    HYPNOSIS, $/;"	e	enum:__anon3
 HiLink	ispc-v1.16.1-linux/contrib/ispc.vim	/^command -nargs=+ HiLink hi def link <args>$/;"	c
 INSTRUMENT_H	ispc-v1.16.1-linux/examples/cpu/aobench_instrumented/instrument.h	35;"	d
 ISPC	assignments/assignment1/prog3_mandelbrot_ispc/Makefile	/^ISPC=ispc$/;"	m
@@ -180,12 +180,12 @@ ISPCLaunch	assignments/assignment1/common/tasksys.cpp	/^void ISPCLaunch(void **t
 ISPCLaunch	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^void ISPCLaunch(void **taskGroupPtr, void *func, void *data, int count) {$/;"	f
 ISPCLaunch	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^void ISPCLaunch(void **taskGroupPtr, void *func, void *data, int count0, int count1, int count2) {$/;"	f
 ISPCPrintInstrument	ispc-v1.16.1-linux/examples/cpu/aobench_instrumented/instrument.cpp	/^void ISPCPrintInstrument() {$/;"	f
-ISPCRTAllocationType	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^} ISPCRTAllocationType;$/;"	t	typeref:enum:__anon8
+ISPCRTAllocationType	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^} ISPCRTAllocationType;$/;"	t	typeref:enum:__anon9
 ISPCRTDevice	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^typedef _ISPCRTDevice *ISPCRTDevice;$/;"	t
 ISPCRTDevice	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^typedef void *ISPCRTDevice;$/;"	t
-ISPCRTDeviceInfo	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^} ISPCRTDeviceInfo;$/;"	t	typeref:struct:__anon7
-ISPCRTDeviceType	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^} ISPCRTDeviceType;$/;"	t	typeref:enum:__anon6
-ISPCRTError	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^} ISPCRTError;$/;"	t	typeref:enum:__anon5
+ISPCRTDeviceInfo	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^} ISPCRTDeviceInfo;$/;"	t	typeref:struct:__anon8
+ISPCRTDeviceType	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^} ISPCRTDeviceType;$/;"	t	typeref:enum:__anon7
+ISPCRTError	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^} ISPCRTError;$/;"	t	typeref:enum:__anon6
 ISPCRTErrorFunc	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^typedef void (*ISPCRTErrorFunc)(ISPCRTError, const char *errorMessage);$/;"	t
 ISPCRTFuture	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^typedef _ISPCRTFuture *ISPCRTFuture;$/;"	t
 ISPCRTFuture	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^typedef void *ISPCRTFuture;$/;"	t
@@ -196,19 +196,19 @@ ISPCRTMemoryView	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^typedef _ISPCRTMem
 ISPCRTMemoryView	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^typedef void *ISPCRTMemoryView;$/;"	t
 ISPCRTModule	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^typedef _ISPCRTModule *ISPCRTModule;$/;"	t
 ISPCRTModule	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^typedef void *ISPCRTModule;$/;"	t
-ISPCRTNewMemoryViewFlags	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^} ISPCRTNewMemoryViewFlags;$/;"	t	typeref:struct:__anon9
+ISPCRTNewMemoryViewFlags	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^} ISPCRTNewMemoryViewFlags;$/;"	t	typeref:struct:__anon10
 ISPCRTTaskQueue	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^typedef _ISPCRTTaskQueue *ISPCRTTaskQueue;$/;"	t
 ISPCRTTaskQueue	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^typedef void *ISPCRTTaskQueue;$/;"	t
-ISPCRT_ALLOC_TYPE_DEVICE	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_ALLOC_TYPE_DEVICE = 0,$/;"	e	enum:__anon8
-ISPCRT_ALLOC_TYPE_SHARED	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_ALLOC_TYPE_SHARED,$/;"	e	enum:__anon8
-ISPCRT_DEVICE_LOST	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_DEVICE_LOST = 4$/;"	e	enum:__anon5
-ISPCRT_DEVICE_TYPE_AUTO	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_DEVICE_TYPE_AUTO \/\/ try 'GPU', but fallback to 'CPU' if no GPUs found$/;"	e	enum:__anon6
-ISPCRT_DEVICE_TYPE_CPU	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_DEVICE_TYPE_CPU,$/;"	e	enum:__anon6
-ISPCRT_DEVICE_TYPE_GPU	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_DEVICE_TYPE_GPU,$/;"	e	enum:__anon6
-ISPCRT_INVALID_ARGUMENT	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_INVALID_ARGUMENT = 2,$/;"	e	enum:__anon5
-ISPCRT_INVALID_OPERATION	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_INVALID_OPERATION = 3,$/;"	e	enum:__anon5
-ISPCRT_NO_ERROR	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_NO_ERROR = 0,$/;"	e	enum:__anon5
-ISPCRT_UNKNOWN_ERROR	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_UNKNOWN_ERROR = 1,$/;"	e	enum:__anon5
+ISPCRT_ALLOC_TYPE_DEVICE	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_ALLOC_TYPE_DEVICE = 0,$/;"	e	enum:__anon9
+ISPCRT_ALLOC_TYPE_SHARED	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_ALLOC_TYPE_SHARED,$/;"	e	enum:__anon9
+ISPCRT_DEVICE_LOST	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_DEVICE_LOST = 4$/;"	e	enum:__anon6
+ISPCRT_DEVICE_TYPE_AUTO	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_DEVICE_TYPE_AUTO \/\/ try 'GPU', but fallback to 'CPU' if no GPUs found$/;"	e	enum:__anon7
+ISPCRT_DEVICE_TYPE_CPU	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_DEVICE_TYPE_CPU,$/;"	e	enum:__anon7
+ISPCRT_DEVICE_TYPE_GPU	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_DEVICE_TYPE_GPU,$/;"	e	enum:__anon7
+ISPCRT_INVALID_ARGUMENT	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_INVALID_ARGUMENT = 2,$/;"	e	enum:__anon6
+ISPCRT_INVALID_OPERATION	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_INVALID_OPERATION = 3,$/;"	e	enum:__anon6
+ISPCRT_NO_ERROR	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_NO_ERROR = 0,$/;"	e	enum:__anon6
+ISPCRT_UNKNOWN_ERROR	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRT_UNKNOWN_ERROR = 1,$/;"	e	enum:__anon6
 ISPCSync	assignments/assignment1/common/tasksys.cpp	/^ISPCSync(void *h) {$/;"	f
 ISPCSync	assignments/assignment1/common/tasksys.cpp	/^void ISPCSync(void *h) $/;"	f
 ISPCSync	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^void ISPCSync(void *h) {$/;"	f
@@ -268,7 +268,7 @@ LDFRAMEWORKS	assignments/assignment2/render/Makefile	/^LDFRAMEWORKS := $(addpref
 LDLIBS	assignments/assignment2/render/Makefile	/^LDLIBS  := $(addprefix -l, $(LIBS))$/;"	m
 LIBS	assignments/assignment2/render/Makefile	/^LIBS       :=$/;"	m
 LINUX	ispc-v1.16.1-linux/examples/cpu/sgemm/SGEMM_main.cpp	70;"	d	file:
-LITTLE_BIG	assignments/assignment2/render/circleRenderer.h	/^    LITTLE_BIG$/;"	e	enum:__anon1
+LITTLE_BIG	assignments/assignment2/render/circleRenderer.h	/^    LITTLE_BIG$/;"	e	enum:__anon3
 LOGGER_H_	assignments/assignment1/prog2_vecintrin/logger.h	2;"	d
 LOGS	assignments/assignment2/render/Makefile	/^LOGS	   := logs$/;"	m
 LOGS	assignments/assignment2/scan/Makefile	/^LOGS	   := logs$/;"	m
@@ -386,7 +386,7 @@ NVCC	assignments/assignment2/scan/Makefile	/^NVCC=nvcc$/;"	m
 NVCCFLAGS	assignments/assignment2/render/Makefile	/^NVCCFLAGS=-O3 -m64 --gpu-architecture compute_35$/;"	m
 NVCCFLAGS	assignments/assignment2/saxpy/Makefile	/^NVCCFLAGS=-O3 -m64 #--gpu-architecture compute_35$/;"	m
 NVCCFLAGS	assignments/assignment2/scan/Makefile	/^NVCCFLAGS=-O3 -m64 --gpu-architecture compute_35$/;"	m
-Nd	ispc-v1.16.1-linux/examples/xpu/sgemm/Matrix.h	/^typedef enum { RowMajor, ColMajor, Nd } storage_type_t;$/;"	e	enum:__anon10
+Nd	ispc-v1.16.1-linux/examples/xpu/sgemm/Matrix.h	/^typedef enum { RowMajor, ColMajor, Nd } storage_type_t;$/;"	e	enum:__anon5
 Noise	ispc-v1.16.1-linux/examples/cpu/noise/noise_serial.cpp	/^static float Noise(float x, float y, float z) {$/;"	f	file:
 Noise	ispc-v1.16.1-linux/examples/xpu/noise/noise_serial.cpp	/^static float Noise(float x, float y, float z) {$/;"	f	file:
 Noise1DValueTable	assignments/assignment2/render/noise.cpp	/^static float Noise1DValueTable[] = {$/;"	v	file:
@@ -414,7 +414,7 @@ OBJS	assignments/assignment2/saxpy/Makefile	/^OBJS=$(OBJDIR)\/main.o  $(OBJDIR)\
 OBJS	assignments/assignment2/scan/Makefile	/^OBJS=$(OBJDIR)\/main.o  $(OBJDIR)\/scan.o$/;"	m
 OPTIONS_DEFS_H	ispc-v1.16.1-linux/examples/cpu/options/options_defs.h	35;"	d
 Offset	ispc-v1.16.1-linux/examples/cpu/volume_rendering/volume_serial.cpp	/^static inline float3 Offset(float3 p, float3 pMin, float3 pMax) {$/;"	f	file:
-PATTERN	assignments/assignment2/render/circleRenderer.h	/^    PATTERN,$/;"	e	enum:__anon1
+PATTERN	assignments/assignment2/render/circleRenderer.h	/^    PATTERN,$/;"	e	enum:__anon3
 PPM_CXX	assignments/assignment1/prog1_mandelbrot_threads/Makefile	/^PPM_CXX=$(COMMONDIR)\/ppm.cpp$/;"	m
 PPM_CXX	assignments/assignment1/prog3_mandelbrot_ispc/Makefile	/^PPM_CXX=$(COMMONDIR)\/ppm.cpp$/;"	m
 PPM_CXX	assignments/assignment1/prog4_sqrt/Makefile	/^PPM_CXX=$(COMMONDIR)\/ppm.cpp$/;"	m
@@ -441,7 +441,7 @@ Reset	assignments/assignment1/common/tasksys.cpp	/^    void Reset() {$/;"	f	clas
 Reset	assignments/assignment1/common/tasksys.cpp	/^TaskGroupBase::Reset() {$/;"	f	class:TaskGroupBase
 Reset	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^    void Reset() {$/;"	f	class:TaskGroup
 Reset	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^inline void TaskGroupBase::Reset() {$/;"	f	class:TaskGroupBase
-RowMajor	ispc-v1.16.1-linux/examples/xpu/sgemm/Matrix.h	/^typedef enum { RowMajor, ColMajor, Nd } storage_type_t;$/;"	e	enum:__anon10
+RowMajor	ispc-v1.16.1-linux/examples/xpu/sgemm/Matrix.h	/^typedef enum { RowMajor, ColMajor, Nd } storage_type_t;$/;"	e	enum:__anon5
 RunResult	ispc-v1.16.1-linux/examples/xpu/sgemm/sgemm.hpp	/^    struct RunResult {$/;"	s	class:SGEMMApp
 SGEMMApp	ispc-v1.16.1-linux/examples/xpu/sgemm/sgemm.hpp	/^    SGEMMApp(bool verbose) : m_verbose{verbose} {};$/;"	f	class:SGEMMApp
 SGEMMApp	ispc-v1.16.1-linux/examples/xpu/sgemm/sgemm.hpp	/^class SGEMMApp {$/;"	c
@@ -449,10 +449,10 @@ SGEMMFuncPtr	ispc-v1.16.1-linux/examples/cpu/sgemm/SGEMM_main.cpp	/^typedef void
 SGEMMFuncPtr_MultiThreaded	ispc-v1.16.1-linux/examples/cpu/sgemm/SGEMM_main.cpp	/^typedef void (*SGEMMFuncPtr_MultiThreaded)(float matrixA[], float matrixB[], float matrixC[], unsigned int M,$/;"	t	file:
 SGEMMFuncPtr_SingleThreaded	ispc-v1.16.1-linux/examples/cpu/sgemm/SGEMM_main.cpp	/^typedef void (*SGEMMFuncPtr_SingleThreaded)(float matrixA[], float matrixB[], float matrixC[], unsigned int M,$/;"	t	file:
 SGEMM_CPU_validation	ispc-v1.16.1-linux/examples/cpu/sgemm/SGEMM_main.cpp	/^void SGEMM_CPU_validation(float matrixA[], float matrixB[], float matrixC[], unsigned int M, unsigned int N,$/;"	f
-SNOWFLAKES	assignments/assignment2/render/circleRenderer.h	/^    SNOWFLAKES,$/;"	e	enum:__anon1
-SNOWFLAKES_SINGLE_FRAME	assignments/assignment2/render/circleRenderer.h	/^    SNOWFLAKES_SINGLE_FRAME,$/;"	e	enum:__anon1
+SNOWFLAKES	assignments/assignment2/render/circleRenderer.h	/^    SNOWFLAKES,$/;"	e	enum:__anon3
+SNOWFLAKES_SINGLE_FRAME	assignments/assignment2/render/circleRenderer.h	/^    SNOWFLAKES_SINGLE_FRAME,$/;"	e	enum:__anon3
 SZ	ispc-v1.16.1-linux/examples/xpu/noise/noise.cpp	58;"	d	file:
-SceneName	assignments/assignment2/render/circleRenderer.h	/^} SceneName;$/;"	t	typeref:enum:__anon1
+SceneName	assignments/assignment2/render/circleRenderer.h	/^} SceneName;$/;"	t	typeref:enum:__anon3
 ShadeDynamicTile	ispc-v1.16.1-linux/examples/cpu/deferred/dynamic_c.cpp	/^void ShadeDynamicTile(InputData *input, int level, int tileX, int tileY, Framebuffer *framebuffer) {$/;"	f
 ShadeDynamicTileRecurse	ispc-v1.16.1-linux/examples/cpu/deferred/dynamic_c.cpp	/^void ShadeDynamicTileRecurse(InputData *input, int level, int tileX, int tileY, int *lightIndices, int numLights,$/;"	f
 ShadeTileC	ispc-v1.16.1-linux/examples/cpu/deferred/dynamic_c.cpp	/^static void ShadeTileC(int32_t tileStartX, int32_t tileEndX, int32_t tileStartY, int32_t tileEndY, int32_t gBufferWidth,$/;"	f	file:
@@ -542,7 +542,7 @@ WINDOWS	ispc-v1.16.1-linux/examples/cpu/perfbench/perfbench.cpp	41;"	d	file:
 WINDOWS	ispc-v1.16.1-linux/examples/cpu/perfbench/perfbench_serial.cpp	37;"	d	file:
 WINDOWS	ispc-v1.16.1-linux/examples/cpu/sgemm/SGEMM_main.cpp	64;"	d	file:
 WINDOWS	ispc-v1.16.1-linux/examples/cpu/sgemm/SGEMM_main.cpp	67;"	d	file:
-WorkerArgs	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^} WorkerArgs;$/;"	t	typeref:struct:__anon4	file:
+WorkerArgs	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^} WorkerArgs;$/;"	t	typeref:struct:__anon1	file:
 WriteFrame	ispc-v1.16.1-linux/examples/cpu/deferred/common.cpp	/^void WriteFrame(const char *filename, const InputData *input, const Framebuffer &framebuffer) {$/;"	f
 XFILE	assignments/assignment2/Makefile	/^XFILE = render\/snow.par$/;"	m
 _CRT_SECURE_NO_DEPRECATE	ispc-v1.16.1-linux/examples/cpu/aobench_instrumented/ao.cpp	39;"	d	file:
@@ -635,6 +635,7 @@ _cmu418_vstore_int	assignments/assignment1/prog2_vecintrin/CMU418intrin.cpp	/^vo
 _cmu418_vsub	assignments/assignment1/prog2_vecintrin/CMU418intrin.cpp	/^void _cmu418_vsub(__cmu418_vec<T> &vecResult, __cmu418_vec<T> &veca, __cmu418_vec<T> &vecb, __cmu418_mask &mask) {$/;"	f
 _cmu418_vsub_float	assignments/assignment1/prog2_vecintrin/CMU418intrin.cpp	/^void _cmu418_vsub_float(__cmu418_vec_float &vecResult, __cmu418_vec_float &veca, __cmu418_vec_float &vecb, __cmu418_mask &mask) { _cmu418_vsub<float>(vecResult, veca, vecb, mask); }$/;"	f
 _cmu418_vsub_int	assignments/assignment1/prog2_vecintrin/CMU418intrin.cpp	/^void _cmu418_vsub_int(__cmu418_vec_int &vecResult, __cmu418_vec_int &veca, __cmu418_vec_int &vecb, __cmu418_mask &mask) { _cmu418_vsub<int>(vecResult, veca, vecb, mask); }$/;"	f
+_my_int_to_mask	assignments/assignment1/prog2_vecintrin/functions.cpp	/^__cmu418_mask _my_int_to_mask(__cmu418_vec_int &src, __cmu418_mask mask) {$/;"	f
 _nonzeroes	ispc-v1.16.1-linux/examples/cpu/gmres/matrix.h	/^    unsigned int _nonzeroes;$/;"	m	class:CRSMatrix
 _size	ispc-v1.16.1-linux/examples/cpu/gmres/matrix.h	/^    size_t _size;$/;"	m	class:Vector
 _size_	ispc-v1.16.1-linux/examples/xpu/sgemm/Matrix.h	/^    int _size_;$/;"	m	class:Matrix
@@ -658,7 +659,7 @@ allOff	ispc-v1.16.1-linux/examples/cpu/aobench_instrumented/instrument.cpp	/^   
 allocOne	assignments/assignment1/common/tasksys.cpp	/^    inline Task *allocOne()$/;"	f	class:TaskSys
 allocOne	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^    inline Task *allocOne() {$/;"	f	class:TaskSys
 allocOutputImage	assignments/assignment2/render/refRenderer.cpp	/^RefRenderer::allocOutputImage(int width, int height) {$/;"	f	class:RefRenderer
-allocType	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRTAllocationType allocType;$/;"	m	struct:__anon9
+allocType	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    ISPCRTAllocationType allocType;$/;"	m	struct:__anon10
 allocate	ispc-v1.16.1-linux/examples/xpu/pipeline-dpcpp/pipeline-dpcpp.hpp	/^inline T *gpu_allocator<T>::allocate(const size_t n) const {$/;"	f	class:gpu_allocator
 allocate	ispc-v1.16.1-linux/include/ispcrt/ispcrt.hpp	/^inline T *SharedMemoryAllocator<T>::allocate(const size_t n) {$/;"	f	class:ispcrt::SharedMemoryAllocator
 ambient_occlusion	ispc-v1.16.1-linux/examples/cpu/aobench/ao_serial.cpp	/^static float ambient_occlusion(Isect &isect, Plane &plane, Sphere spheres[3]) {$/;"	f	file:
@@ -740,11 +741,11 @@ data	assignments/assignment1/common/tasksys.cpp	/^    void *data;$/;"	m	struct:T
 data	assignments/assignment2/render/image.h	/^    float* data;$/;"	m	struct:Image
 data	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^    void *data;$/;"	m	struct:Task	file:
 data	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^    void *data;$/;"	m	struct:TaskInfo	file:
-data_t	assignments/assignment1/prog4_sqrt/main.cpp	/^typedef enum { DATA_RANDOM, DATA_GOOD, DATA_BAD } data_t;$/;"	t	typeref:enum:__anon3	file:
+data_t	assignments/assignment1/prog4_sqrt/main.cpp	/^typedef enum { DATA_RANDOM, DATA_GOOD, DATA_BAD } data_t;$/;"	t	typeref:enum:__anon2	file:
 deallocate	ispc-v1.16.1-linux/examples/xpu/pipeline-dpcpp/pipeline-dpcpp.hpp	/^inline void gpu_allocator<T>::deallocate(T* const p, const size_t) const {$/;"	f	class:gpu_allocator
 deallocate	ispc-v1.16.1-linux/include/ispcrt/ispcrt.hpp	/^inline void SharedMemoryAllocator<T>::deallocate(T* const p, const size_t) {$/;"	f	class:ispcrt::SharedMemoryAllocator
 deviceCount	ispc-v1.16.1-linux/include/ispcrt/ispcrt.hpp	/^inline uint32_t Device::deviceCount(ISPCRTDeviceType type) {$/;"	f	class:ispcrt::Device
-deviceId	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    uint32_t deviceId;$/;"	m	struct:__anon7
+deviceId	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    uint32_t deviceId;$/;"	m	struct:__anon8
 deviceInformation	ispc-v1.16.1-linux/include/ispcrt/ispcrt.hpp	/^inline ISPCRTDeviceInfo Device::deviceInformation(ISPCRTDeviceType type, uint32_t deviceIdx) {$/;"	f	class:ispcrt::Device
 devicePtr	ispc-v1.16.1-linux/include/ispcrt/ispcrt.hpp	/^    inline T *Array<T,AT>::devicePtr(EnableForDeviceAllocation<alloc>) const { return (T *)ispcrtDevicePtr(handle()); }$/;"	f	class:ispcrt::Array
 dir	ispc-v1.16.1-linux/examples/cpu/aobench/ao_serial.cpp	/^    vec dir;$/;"	m	struct:Ray	file:
@@ -791,7 +792,7 @@ func	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^    TaskFuncType func;$/;"
 futures	assignments/assignment1/common/tasksys.cpp	/^    std::vector<hpx::future<void>> futures;$/;"	m	class:TaskGroup	file:
 futures	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^    std::vector<hpx::future<void>> futures;$/;"	m	class:TaskGroup	file:
 g	ispc-v1.16.1-linux/examples/cpu/deferred/deferred.h	/^    uint8_t *r, *g, *b;$/;"	m	struct:Framebuffer
-gDisplay	assignments/assignment2/render/display.cpp	/^} gDisplay;$/;"	v	typeref:struct:__anon2	file:
+gDisplay	assignments/assignment2/render/display.cpp	/^} gDisplay;$/;"	v	typeref:struct:__anon4	file:
 gMinMaxZTree	ispc-v1.16.1-linux/examples/cpu/deferred/dynamic_c.cpp	/^static MinMaxZTree *gMinMaxZTree = 0;$/;"	v	file:
 gcdGroup	assignments/assignment1/common/tasksys.cpp	/^    dispatch_group_t gcdGroup;$/;"	m	class:TaskGroup	file:
 gcdGroup	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^    dispatch_group_t gcdGroup;$/;"	m	class:TaskGroup	file:
@@ -820,8 +821,8 @@ handleDisplay	assignments/assignment2/render/display.cpp	/^handleDisplay() {$/;"
 handleKeyPress	assignments/assignment2/render/display.cpp	/^handleKeyPress(unsigned char key, int x, int y) {$/;"	f
 handleReshape	assignments/assignment2/render/display.cpp	/^handleReshape(int w, int h) {$/;"	f
 header	ispc-v1.16.1-linux/examples/cpu/deferred/deferred.h	/^    ispc::InputHeader header;$/;"	m	struct:InputData
-height	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    unsigned int height;$/;"	m	struct:__anon4	file:
-height	assignments/assignment2/render/display.cpp	/^    int height;$/;"	m	struct:__anon2	file:
+height	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    unsigned int height;$/;"	m	struct:__anon1	file:
+height	assignments/assignment2/render/display.cpp	/^    int height;$/;"	m	struct:__anon4	file:
 height	assignments/assignment2/render/image.h	/^    int height;$/;"	m	struct:Image
 height	ispc-v1.16.1-linux/examples/cpu/aobench/ao.cpp	/^static unsigned int width, height;$/;"	v	file:
 height	ispc-v1.16.1-linux/examples/cpu/aobench_instrumented/ao.cpp	/^static unsigned int width, height;$/;"	v	file:
@@ -867,6 +868,7 @@ init	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^    static inline void ini
 initBad	assignments/assignment1/prog4_sqrt/data.cpp	/^void initBad(float *values, int N) {$/;"	f
 initGood	assignments/assignment1/prog4_sqrt/data.cpp	/^void initGood(float *values, int N) {$/;"	f
 initRandom	assignments/assignment1/prog4_sqrt/data.cpp	/^void initRandom(float *values, int N) {$/;"	f
+initTestValue	assignments/assignment1/prog2_vecintrin/main.cpp	/^void initTestValue(float *values, int *exponents, float *output, float *gold, unsigned int N) {$/;"	f
 initValue	assignments/assignment1/prog2_vecintrin/main.cpp	/^void initValue(float* values, int* exponents, float* output, float* gold, unsigned int N) {$/;"	f
 init_0_15	ispc-v1.16.1-linux/examples/xpu/sgemm/NaiveCMSgemm_genx.cpp	/^const short init_0_15[16] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};$/;"	v
 init_matrix	ispc-v1.16.1-linux/examples/cpu/sgemm/SGEMM_main.cpp	/^void init_matrix(float M[], unsigned int rows, unsigned int cols, float value) {$/;"	f
@@ -901,7 +903,7 @@ lTaskEntry	assignments/assignment1/common/tasksys.cpp	/^lTaskEntry(void *arg) {$
 lTaskEntry	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^static void *lTaskEntry(void *arg) {$/;"	f	file:
 l_dim	ispc-v1.16.1-linux/examples/xpu/sgemm/Matrix.h	/^    int l_dim() { return ld; }$/;"	f	class:Matrix
 laneCount	ispc-v1.16.1-linux/examples/cpu/aobench_instrumented/instrument.cpp	/^    int laneCount;$/;"	m	struct:CallInfo	file:
-lastFrameTime	assignments/assignment2/render/display.cpp	/^    double lastFrameTime;$/;"	m	struct:__anon2	file:
+lastFrameTime	assignments/assignment2/render/display.cpp	/^    double lastFrameTime;$/;"	m	struct:__anon4	file:
 launch	ispc-v1.16.1-linux/include/ispcrt/ispcrt.hpp	/^inline Future TaskQueue::launch(const Kernel &k, const Array<T,AT> &p, size_t dim0, size_t dim1) const {$/;"	f	class:ispcrt::TaskQueue
 launch	ispc-v1.16.1-linux/include/ispcrt/ispcrt.hpp	/^inline Future TaskQueue::launch(const Kernel &k, const Array<T,AT> &p, size_t dim0, size_t dim1, size_t dim2) const {$/;"	f	class:ispcrt::TaskQueue
 launch	ispc-v1.16.1-linux/include/ispcrt/ispcrt.hpp	/^inline Future TaskQueue::launch(const Kernel &k, size_t dim0) const {$/;"	f	class:ispcrt::TaskQueue
@@ -983,7 +985,7 @@ markOneDone	assignments/assignment1/common/tasksys.cpp	/^    inline void markOne
 markOneDone	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^    inline void markOneDone() { lAtomicAdd(&numDone, 1); }$/;"	f	struct:Task
 mask	assignments/assignment1/prog2_vecintrin/logger.h	/^  unsigned long long mask; \/\/ support vector width up to 64$/;"	m	struct:Log
 matrix_from_mtf	ispc-v1.16.1-linux/examples/cpu/gmres/matrix.cpp	/^CRSMatrix *CRSMatrix::matrix_from_mtf(char *path) {$/;"	f	class:CRSMatrix
-maxIterations	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    int maxIterations;$/;"	m	struct:__anon4	file:
+maxIterations	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    int maxIterations;$/;"	m	struct:__anon1	file:
 maxIterations	ispc-v1.16.1-linux/examples/xpu/mandelbrot/mandelbrot.cpp	/^    int maxIterations;$/;"	m	struct:Parameters	file:
 maxt	ispc-v1.16.1-linux/examples/cpu/rt/rt_serial.cpp	/^    float mint, maxt;$/;"	m	struct:Ray	file:
 mem	assignments/assignment1/common/tasksys.cpp	/^    char mem[256];$/;"	m	class:TaskGroupBase	file:
@@ -1082,7 +1084,7 @@ numDone	assignments/assignment1/common/tasksys.cpp	/^    volatile int numDone;$/
 numDone	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^    volatile int numDone;$/;"	m	struct:Task	file:
 numJobs	assignments/assignment1/common/tasksys.cpp	/^    inline int  numJobs() { return taskCount; }$/;"	f	struct:Task
 numJobs	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^    inline int numJobs() { return taskCount; }$/;"	f	struct:Task
-numThreads	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    int numThreads;$/;"	m	struct:__anon4	file:
+numThreads	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    int numThreads;$/;"	m	struct:__anon1	file:
 numThreadsRunning	assignments/assignment1/common/tasksys.cpp	/^    static int numThreadsRunning;$/;"	m	class:TaskSys	file:
 numThreadsRunning	assignments/assignment1/common/tasksys.cpp	/^int TaskSys::numThreadsRunning = 0;$/;"	m	class:TaskSys	file:
 numThreadsRunning	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^    static int numThreadsRunning;$/;"	m	class:TaskSys	file:
@@ -1136,7 +1138,7 @@ origin	ispc-v1.16.1-linux/examples/cpu/rt/rt_serial.cpp	/^    float3 origin, dir
 origin	ispc-v1.16.1-linux/examples/cpu/volume_rendering/volume_serial.cpp	/^    float3 origin, dir;$/;"	m	struct:Ray	file:
 orthoBasis	ispc-v1.16.1-linux/examples/cpu/aobench/ao_serial.cpp	/^static inline void orthoBasis(vec basis[3], const vec &n) {$/;"	f	file:
 orthoBasis	ispc-v1.16.1-linux/examples/xpu/aobench/ao_serial.cpp	/^static inline void orthoBasis(vec basis[3], const vec &n) {$/;"	f	file:
-output	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    int* output;$/;"	m	struct:__anon4	file:
+output	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    int* output;$/;"	m	struct:__anon1	file:
 p	ispc-v1.16.1-linux/examples/cpu/aobench/ao_serial.cpp	/^    vec p;$/;"	m	struct:Isect	file:
 p	ispc-v1.16.1-linux/examples/cpu/aobench/ao_serial.cpp	/^    vec p;$/;"	m	struct:Plane	file:
 p	ispc-v1.16.1-linux/examples/cpu/rt/rt_serial.cpp	/^    float p[3][4]; \/\/ extra float pad after each vertex$/;"	m	struct:ispc::Triangle	file:
@@ -1151,14 +1153,14 @@ pad	ispc-v1.16.1-linux/examples/cpu/rt/rt_serial.cpp	/^    uint16_t pad;$/;"	m	s
 pad	ispc-v1.16.1-linux/examples/cpu/volume_rendering/volume_serial.cpp	/^    float pad; \/\/ match padding\/alignment of ispc version$/;"	m	struct:float3	file:
 pad	ispc-v1.16.1-linux/examples/xpu/aobench/ao_serial.cpp	/^    float pad;$/;"	m	struct:vec	file:
 pair	ispc-v1.16.1-linux/examples/cpu/sort/sort_serial.cpp	/^typedef std::pair<double, int> pair;$/;"	t	file:
-pauseSim	assignments/assignment2/render/display.cpp	/^    bool pauseSim;$/;"	m	struct:__anon2	file:
+pauseSim	assignments/assignment2/render/display.cpp	/^    bool pauseSim;$/;"	m	struct:__anon4	file:
 position	assignments/assignment2/render/cudaRenderer.h	/^    float* position;$/;"	m	class:CudaRenderer
 position	assignments/assignment2/render/refRenderer.h	/^    float* position;$/;"	m	class:RefRenderer
 print	ispc-v1.16.1-linux/examples/xpu/common/common_helpers.h	/^    void print(int niter) {$/;"	f	struct:hostutil::Timings
 printLog	assignments/assignment1/prog2_vecintrin/logger.cpp	/^void Logger::printLog() {$/;"	f	class:Logger
 printMatrix	ispc-v1.16.1-linux/examples/cpu/gmres/util.h	/^inline void printMatrix(DenseMatrix &M, const char *name) {$/;"	f
 printStats	assignments/assignment1/prog2_vecintrin/logger.cpp	/^void Logger::printStats() {$/;"	f	class:Logger
-printStats	assignments/assignment2/render/display.cpp	/^    bool printStats;$/;"	m	struct:__anon2	file:
+printStats	assignments/assignment2/render/display.cpp	/^    bool printStats;$/;"	m	struct:__anon4	file:
 print_matrix	ispc-v1.16.1-linux/examples/cpu/sgemm/SGEMM_main.cpp	/^void print_matrix(char *pcName, float M[], unsigned int rows, unsigned int cols) {$/;"	f
 progressBar	ispc-v1.16.1-linux/examples/cpu/sort/sort.cpp	/^static void progressBar(const int x, const int n, const int width = 50) {$/;"	f	file:
 r	ispc-v1.16.1-linux/examples/cpu/deferred/deferred.h	/^    uint8_t *r, *g, *b;$/;"	m	struct:Framebuffer
@@ -1178,7 +1180,7 @@ rdtsc	ispc-v1.16.1-linux/examples/common/timing.h	/^__inline__ uint64_t rdtsc() 
 rdtsc	ispc-v1.16.1-linux/examples/common/timing.h	73;"	d
 render	assignments/assignment2/render/refRenderer.cpp	/^RefRenderer::render() {$/;"	f	class:RefRenderer
 renderPicture	assignments/assignment2/render/display.cpp	/^renderPicture() {$/;"	f
-renderer	assignments/assignment2/render/display.cpp	/^    CircleRenderer* renderer;$/;"	m	struct:__anon2	file:
+renderer	assignments/assignment2/render/display.cpp	/^    CircleRenderer* renderer;$/;"	m	struct:__anon4	file:
 reset_and_start_timer	ispc-v1.16.1-linux/examples/common/timing.h	/^static inline void reset_and_start_timer() {$/;"	f
 row	ispc-v1.16.1-linux/examples/cpu/gmres/matrix.cpp	/^    int row;$/;"	m	struct:entry	file:
 row	ispc-v1.16.1-linux/examples/cpu/gmres/matrix.cpp	/^const Vector *DenseMatrix::row(size_t row) const { return new Vector(num_cols, entries + row * num_cols, true); }$/;"	f	class:DenseMatrix
@@ -1242,7 +1244,7 @@ startBenchmark	assignments/assignment2/render/benchmark.cpp	/^startBenchmark($/;
 startRendererWithDisplay	assignments/assignment2/render/display.cpp	/^startRendererWithDisplay(CircleRenderer* renderer) {$/;"	f
 stats	assignments/assignment1/prog2_vecintrin/logger.h	/^    Statistics stats;$/;"	m	class:Logger
 stencil_step	ispc-v1.16.1-linux/examples/cpu/stencil/stencil_serial.cpp	/^static void stencil_step(int x0, int x1, int y0, int y1, int z0, int z1, int Nx, int Ny, int Nz, const float coef[4],$/;"	f	file:
-storage_type_t	ispc-v1.16.1-linux/examples/xpu/sgemm/Matrix.h	/^typedef enum { RowMajor, ColMajor, Nd } storage_type_t;$/;"	t	typeref:enum:__anon10
+storage_type_t	ispc-v1.16.1-linux/examples/xpu/sgemm/Matrix.h	/^typedef enum { RowMajor, ColMajor, Nd } storage_type_t;$/;"	t	typeref:enum:__anon5
 storagename	ispc-v1.16.1-linux/examples/xpu/sgemm/Matrix.h	/^static const char *storagename[Nd] = {"RowMajor", "ColMajor"};$/;"	v
 submit	assignments/assignment1/submit.py	/^def submit(id):$/;"	f
 submit	ispc-v1.16.1-linux/include/ispcrt/ispcrt.hpp	/^inline void TaskQueue::submit() const { ispcrtSubmit(handle()); }$/;"	f	class:ispcrt::TaskQueue
@@ -1298,7 +1300,7 @@ thread	assignments/assignment1/common/tasksys.cpp	/^    pthread_t *thread;$/;"	m
 thread	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^    pthread_t *thread;$/;"	m	class:TaskSys	file:
 threadFct	assignments/assignment1/common/tasksys.cpp	/^void TaskSys::threadFct() $/;"	f	class:TaskSys
 threadFct	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^void TaskSys::threadFct() {$/;"	f	class:TaskSys
-threadId	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    int threadId;$/;"	m	struct:__anon4	file:
+threadId	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    int threadId;$/;"	m	struct:__anon1	file:
 threads	assignments/assignment1/common/tasksys.cpp	/^static pthread_t *threads = NULL;$/;"	v	file:
 threads	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^static pthread_t *threads = NULL;$/;"	v	file:
 tickUnits	assignments/assignment1/common/CycleTimer.h	/^    static const char* tickUnits() {$/;"	f	class:CycleTimer
@@ -1329,7 +1331,7 @@ tstart	ispc-v1.16.1-linux/examples/common/timing.h	/^static double tstart, tend;
 uend	ispc-v1.16.1-linux/examples/common/timing.h	/^static uint64_t ustart, uend;$/;"	v
 uint	assignments/assignment2/render/cudaRenderer.h	5;"	d
 uint	ispc-v1.16.1-linux/examples/cpu/rt/rt.cpp	/^typedef unsigned int uint;$/;"	t	file:
-updateSim	assignments/assignment2/render/display.cpp	/^    bool updateSim;$/;"	m	struct:__anon2	file:
+updateSim	assignments/assignment2/render/display.cpp	/^    bool updateSim;$/;"	m	struct:__anon4	file:
 update_column	ispc-v1.16.1-linux/examples/cpu/gmres/algorithm.cpp	/^void update_column(DenseMatrix &H, size_t col, Vector &Cn, Vector &Sn) {$/;"	f
 update_qr_decomp	ispc-v1.16.1-linux/examples/cpu/gmres/algorithm.cpp	/^void update_qr_decomp(DenseMatrix &H, Vector &s, size_t col, Vector &Cn, Vector &Sn) {$/;"	f
 upper_triangular_right_solve	ispc-v1.16.1-linux/examples/cpu/gmres/algorithm.cpp	/^void upper_triangular_right_solve(const DenseMatrix &R, const Vector &b, Vector &x) {$/;"	f
@@ -1370,7 +1372,7 @@ vec2CellNoise	assignments/assignment2/render/noise.cpp	/^vec2CellNoise(float loc
 vector_from_mtf	ispc-v1.16.1-linux/examples/cpu/gmres/matrix.cpp	/^Vector *Vector::vector_from_mtf(char *path) {$/;"	f	class:Vector
 velocity	assignments/assignment2/render/cudaRenderer.h	/^    float* velocity;$/;"	m	class:CudaRenderer
 velocity	assignments/assignment2/render/refRenderer.h	/^    float* velocity;$/;"	m	class:RefRenderer
-vendorId	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    uint32_t vendorId;$/;"	m	struct:__anon7
+vendorId	ispc-v1.16.1-linux/include/ispcrt/ispcrt.h	/^    uint32_t vendorId;$/;"	m	struct:__anon8
 verifyResult	assignments/assignment1/prog1_mandelbrot_threads/main.cpp	/^bool verifyResult (int *gold, int *result, int width, int height) {$/;"	f
 verifyResult	assignments/assignment1/prog2_vecintrin/main.cpp	/^bool verifyResult(float* values, int* exponents, float* output, float* gold, int N) {$/;"	f
 verifyResult	assignments/assignment1/prog3_mandelbrot_ispc/main.cpp	/^bool verifyResult (int *gold, int *result, int width, int height) {$/;"	f
@@ -1384,8 +1386,8 @@ wait	assignments/assignment1/common/tasksys.cpp	/^    inline void wait()$/;"	f	s
 wait	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^    inline void wait() {$/;"	f	struct:Task
 waitingTasks	assignments/assignment1/common/tasksys.cpp	/^    std::vector<int> waitingTasks;$/;"	m	class:TaskGroup	file:
 waitingTasks	ispc-v1.16.1-linux/examples/common/tasksys.cpp	/^    std::vector<int> waitingTasks;$/;"	m	class:TaskGroup	file:
-width	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    unsigned int width;$/;"	m	struct:__anon4	file:
-width	assignments/assignment2/render/display.cpp	/^    int width;$/;"	m	struct:__anon2	file:
+width	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    unsigned int width;$/;"	m	struct:__anon1	file:
+width	assignments/assignment2/render/display.cpp	/^    int width;$/;"	m	struct:__anon4	file:
 width	assignments/assignment2/render/image.h	/^    int width;$/;"	m	struct:Image
 width	ispc-v1.16.1-linux/examples/cpu/aobench/ao.cpp	/^static unsigned int width, height;$/;"	v	file:
 width	ispc-v1.16.1-linux/examples/cpu/aobench_instrumented/ao.cpp	/^static unsigned int width, height;$/;"	v	file:
@@ -1408,10 +1410,10 @@ x	ispc-v1.16.1-linux/examples/cpu/aobench/ao_serial.cpp	/^    float x, y, z;$/;"
 x	ispc-v1.16.1-linux/examples/cpu/rt/rt_serial.cpp	/^    float x, y, z;$/;"	m	struct:float3	file:
 x	ispc-v1.16.1-linux/examples/cpu/volume_rendering/volume_serial.cpp	/^    float x, y, z;$/;"	m	struct:float3	file:
 x	ispc-v1.16.1-linux/examples/xpu/aobench/ao_serial.cpp	/^    float x, y, z;$/;"	m	struct:vec	file:
-x0	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    float x0, x1;$/;"	m	struct:__anon4	file:
+x0	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    float x0, x1;$/;"	m	struct:__anon1	file:
 x0	ispc-v1.16.1-linux/examples/xpu/mandelbrot/mandelbrot.cpp	/^    float x0;$/;"	m	struct:Parameters	file:
 x0	ispc-v1.16.1-linux/examples/xpu/noise/noise.cpp	/^    float x0;$/;"	m	struct:Parameters	file:
-x1	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    float x0, x1;$/;"	m	struct:__anon4	file:
+x1	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    float x0, x1;$/;"	m	struct:__anon1	file:
 x1	ispc-v1.16.1-linux/examples/xpu/noise/noise.cpp	/^    float x1;$/;"	m	struct:Parameters	file:
 xyzSumAOS	ispc-v1.16.1-linux/examples/cpu/perfbench/perfbench_serial.cpp	/^void CALLINGCONV xyzSumAOS(float *a, int count, float *zeros, float *result) {$/;"	f
 xyzSumSOA	ispc-v1.16.1-linux/examples/cpu/perfbench/perfbench_serial.cpp	/^void CALLINGCONV xyzSumSOA(float *a, int count, float *zeros, float *result) {$/;"	f
@@ -1419,10 +1421,10 @@ y	ispc-v1.16.1-linux/examples/cpu/aobench/ao_serial.cpp	/^    float x, y, z;$/;"
 y	ispc-v1.16.1-linux/examples/cpu/rt/rt_serial.cpp	/^    float x, y, z;$/;"	m	struct:float3	file:
 y	ispc-v1.16.1-linux/examples/cpu/volume_rendering/volume_serial.cpp	/^    float x, y, z;$/;"	m	struct:float3	file:
 y	ispc-v1.16.1-linux/examples/xpu/aobench/ao_serial.cpp	/^    float x, y, z;$/;"	m	struct:vec	file:
-y0	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    float y0, y1;$/;"	m	struct:__anon4	file:
+y0	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    float y0, y1;$/;"	m	struct:__anon1	file:
 y0	ispc-v1.16.1-linux/examples/xpu/mandelbrot/mandelbrot.cpp	/^    float y0;$/;"	m	struct:Parameters	file:
 y0	ispc-v1.16.1-linux/examples/xpu/noise/noise.cpp	/^    float y0;$/;"	m	struct:Parameters	file:
-y1	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    float y0, y1;$/;"	m	struct:__anon4	file:
+y1	assignments/assignment1/prog1_mandelbrot_threads/mandelbrot.cpp	/^    float y0, y1;$/;"	m	struct:__anon1	file:
 y1	ispc-v1.16.1-linux/examples/xpu/noise/noise.cpp	/^    float y1;$/;"	m	struct:Parameters	file:
 z	ispc-v1.16.1-linux/examples/cpu/aobench/ao_serial.cpp	/^    float x, y, z;$/;"	m	struct:vec	file:
 z	ispc-v1.16.1-linux/examples/cpu/rt/rt_serial.cpp	/^    float x, y, z;$/;"	m	struct:float3	file:

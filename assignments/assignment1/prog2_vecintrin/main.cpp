@@ -20,6 +20,7 @@ extern float arraySumVector(float* values, int N);
 Logger CMU418Logger;
 
 void usage(const char* progname);
+void initTestValue(float *values, int *exponents, float *output, float *gold, unsigned int N);
 void initValue(float* values, int* exponents, float* output, float* gold, unsigned int N);
 void absSerial(float* values, float* output, int N);
 void absVector(float* values, float* output, int N);
@@ -68,6 +69,7 @@ int main(int argc, char * argv[]) {
   float* output = new float[N+VECTOR_WIDTH];
   float* gold = new float[N+VECTOR_WIDTH];
   initValue(values, exponents, output, gold, N);
+  // initTestValue(values, exponents, output, gold, N);
 
   clampedExpSerial(values, exponents, gold, N);
   clampedExpVector(values, exponents, output, N);
@@ -117,6 +119,15 @@ void usage(const char* progname) {
   printf("  -s  --size <N>     Use workload size N (Default = 16)\n");
   printf("  -l  --log          Print vector unit execution log\n");
   printf("  -?  --help         This message\n");
+}
+
+void initTestValue(float *values, int *exponents, float *output, float *gold, unsigned int N) {
+    for (unsigned int i = 0; i < N+VECTOR_WIDTH ; i++) {
+        values[i] = 2;
+        exponents[i] = i;
+        output[i] = 0.f;
+        gold[i] = 0.f;
+    }
 }
 
 void initValue(float* values, int* exponents, float* output, float* gold, unsigned int N) {
