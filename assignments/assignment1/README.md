@@ -90,5 +90,27 @@ void absVector(float* values, float* output, int N) {
 3. 加分作业 TODO...
 
 # prob3
+在prob1中，每一个线程调用一个core。在prob3中，使用ISPC来实现。在mandelbrot图计算这个例子中，每个像素点的计算都是独立的过程，基于这些前提条件，ISPC编译器负责构建程序，来尽可能高效地调用CPU的并行资源。
 
+## part1
+ispc看起来像cpp,但实际有区别。不同于C的是，ISPC程序的多个进行并行的运行CPU中的SIMD指令，并行的进程数取决于编译器。因此，从C的代码中调用ISPC
+的API就像产生了一组并行的ispc进程。这些并发的进程都运行完以后，再返回到C的代码中。
 
+下面这个例子：
+
+![image](https://user-images.githubusercontent.com/44460962/143202634-22c86dea-9131-458d-a9ca-03ae430adfc7.png)
+
+ispc提供的功能可以减少对于如何split任务的思考
+比如ispc提供的foreach，其中所有的迭代都是独立的，上一张图描述描述了如何将工作split给不同的worker，下面这张图这种写法只是表述执行啥
+
+![image](https://user-images.githubusercontent.com/44460962/143202978-59dfdfb7-fc19-4534-ae45-1ae7a7204100.png)
+
+可以看看ispc的文档，进一步了解使用方法。
+
+**需要做的事**
+
+编译运行mandelbrot.ispc，ispc编译器配置为使用8bit宽的向量指令。你期望你的cpu能达到的最大加速比是多少？为什么实际效果比这个预估的加速比低？
+
+**提醒**
+
+ispc编译器在一个core上使用simd指令，这种并行方式与prog1是不同的，prog1是并发了多个线程，每个线程使用一个core。
