@@ -574,6 +574,10 @@ __CIRCLE_RENDERER_H__	assignments/assignment2/render/circleRenderer.h	2;"	d
 __CUDA_RENDERER_H__	assignments/assignment2/render/cudaRenderer.h	2;"	d
 __DEBUG_H__	ispc-v1.16.1-linux/examples/cpu/gmres/debug.h	35;"	d
 __IMAGE_H__	assignments/assignment2/render/image.h	2;"	d
+__ISPC_ALIGNED_STRUCT__	assignments/assignment1/prog3_mandelbrot_ispc/objs/mandelbrot_ispc.h	20;"	d
+__ISPC_ALIGNED_STRUCT__	assignments/assignment1/prog5_saxpy/objs/saxpy_ispc.h	20;"	d
+__ISPC_ALIGN__	assignments/assignment1/prog3_mandelbrot_ispc/objs/mandelbrot_ispc.h	19;"	d
+__ISPC_ALIGN__	assignments/assignment1/prog5_saxpy/objs/saxpy_ispc.h	19;"	d
 __MATRIX_H__	ispc-v1.16.1-linux/examples/cpu/gmres/matrix.h	35;"	d
 __NOISE_H__	assignments/assignment2/render/noise.h	2;"	d
 __PLATFORM_GL_H__	assignments/assignment2/render/platformgl.h	2;"	d
@@ -878,6 +882,8 @@ initialize	ispc-v1.16.1-linux/examples/xpu/sgemm/sgemm.cpp	/^void SGEMMApp::init
 initialize	ispc-v1.16.1-linux/examples/xpu/simple-dpcpp-l0/simple-dpcpp-l0.cpp	/^void DpcppApp::initialize() {$/;"	f	class:DpcppApp
 instruction	assignments/assignment1/prog2_vecintrin/logger.h	/^  char instruction[MAX_INST_LEN];$/;"	m	struct:Log
 invDir	ispc-v1.16.1-linux/examples/cpu/rt/rt_serial.cpp	/^    float3 origin, dir, invDir;$/;"	m	struct:Ray	file:
+ispc	assignments/assignment1/prog3_mandelbrot_ispc/objs/mandelbrot_ispc.h	/^namespace ispc { \/* namespace *\/$/;"	n
+ispc	assignments/assignment1/prog5_saxpy/objs/saxpy_ispc.h	/^namespace ispc { \/* namespace *\/$/;"	n
 ispc	ispc-v1.16.1-linux/examples/cpu/rt/rt_serial.cpp	/^namespace ispc {$/;"	n	file:
 ispcrt	ispc-v1.16.1-linux/include/ispcrt/ispcrt.hpp	/^namespace ispcrt {$/;"	n
 kMillisecond	ispc-v1.16.1-linux/examples/xpu/sgemm/bench.cpp	/^    benchmark::kMillisecond);$/;"	v

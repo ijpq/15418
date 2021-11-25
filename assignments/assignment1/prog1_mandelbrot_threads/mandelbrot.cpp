@@ -48,6 +48,8 @@
 
 // Core computation of Mandelbrot set membershop
 // Iterate complex number c to determine whether it diverges
+// https://zh.wikipedia.org/wiki/%E6%9B%BC%E5%BE%B7%E5%8D%9A%E9%9B%86%E5%90%88
+// https://baike.baidu.com/item/%E5%A4%8D%E6%95%B0/254365
 static inline int mandel(float c_re, float c_im, int count)
 {
     float z_re = c_re, z_im = c_im;
