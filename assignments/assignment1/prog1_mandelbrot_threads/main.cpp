@@ -130,6 +130,7 @@ int main(int argc, char** argv) {
     int* output_thread = new int[width*height];
 
     //
+    //https://baike.baidu.com/item/%E5%A4%8D%E6%95%B0/254365
     // Run the serial implementation.  Run the code three times and
     // take the minimum to get a good estimate.
     //

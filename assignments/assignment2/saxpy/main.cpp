@@ -25,7 +25,7 @@ void usage(const char* progname) {
 int main(int argc, char** argv)
 {
 
-    int N = 20 * 1000 * 1000;
+    int N = 200 * 1000 * 1000;
 
     // parse commandline options ////////////////////////////////////////////
     int opt;

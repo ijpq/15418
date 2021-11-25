@@ -19,7 +19,8 @@ ifeq ($(ARCH), Darwin)
 LDFLAGS=-L/usr/local/depot/cuda-8.0/lib/ -lcudart
 else
 # Building on Linux
-LDFLAGS=-L/usr/local/cuda-11.2/lib64/ -lcudart
+# LDFLAGS=-L/usr/local/cuda-11.2/lib64/ -lcudart
+LDFLAGS=-L/data/cuda/cuda-11.1/cuda/lib64 -lcudart
 endif
 NVCC=nvcc
 NVCCFLAGS=-O3 -m64 #--gpu-architecture compute_35

@@ -261,7 +261,7 @@ L0_HELPERS_H	ispc-v1.16.1-linux/examples/xpu/common/L0_helpers.h	35;"	d
 L0_SAFE_CALL	ispc-v1.16.1-linux/examples/xpu/common/L0_helpers.h	46;"	d
 LDFLAGS	assignments/assignment2/render/Makefile	/^LDFLAGS=-L\/opt\/cuda-8.0\/lib64\/ -lcudart$/;"	m
 LDFLAGS	assignments/assignment2/render/Makefile	/^LDFLAGS=-L\/usr\/local\/depot\/cuda-8.0\/lib64\/ -lcudart$/;"	m
-LDFLAGS	assignments/assignment2/saxpy/Makefile	/^LDFLAGS=-L\/usr\/local\/cuda-11.2\/lib64\/ -lcudart$/;"	m
+LDFLAGS	assignments/assignment2/saxpy/Makefile	/^LDFLAGS=-L\/data\/cuda\/cuda-11.1\/cuda\/lib64 -lcudart$/;"	m
 LDFLAGS	assignments/assignment2/saxpy/Makefile	/^LDFLAGS=-L\/usr\/local\/depot\/cuda-8.0\/lib\/ -lcudart$/;"	m
 LDFLAGS	assignments/assignment2/scan/Makefile	/^LDFLAGS=-L\/usr\/local\/depot\/cuda-8.0\/lib64\/ -lcudart$/;"	m
 LDFRAMEWORKS	assignments/assignment2/render/Makefile	/^LDFRAMEWORKS := $(addprefix -framework , $(FRAMEWORKS))$/;"	m
