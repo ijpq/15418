@@ -1,15 +1,16 @@
-#define SRC_SIZE 1000
+#define SRC_SIZE 10
 #define THREADS_PER_BLOCK 256
 #define DST_SIZE (SRC_SIZE - 2)
 #include <iostream>
 #include <time.h>
 #include <cstring>
+#include "../../parallelreduce/common/common.h"
 
 using namespace std;
-__global__ void conv(float *src, float *dst, int dst_N) {
+__global__ void conv(float *src, float *dst, size_t dst_N) {
 
     // mapping threads to dst data
-    int thd = threadIdx.x + blockDim.x * blockIdx.x;
+    size_t thd = threadIdx.x + blockDim.x * blockIdx.x;
     if (thd >= dst_N) return;
 
     // whether it is final remainder block
@@ -31,7 +32,7 @@ __global__ void conv(float *src, float *dst, int dst_N) {
     return ;
 }
 
-void serial(float *src, float *dst, const int &dst_N) {
+void serial(float *src, float *dst, size_t dst_N) {
     for (int i = 0; i < dst_N; i++) {
         dst[i] = (src[i] + src[i+1] + src[i+2]) / 3.f;
     }
@@ -47,7 +48,7 @@ void output_dst(float *dst, size_t size) {
 }
 
 int checkResult(float *cpuResult, float *gpuResult, size_t size) {
-    for (int i =0 ; i < size; i++) {
+    for (auto i =0 ; i < size; i++) {
         if (cpuResult[i] != gpuResult[i]) {
             cout << cpuResult[i] << "!=" << gpuResult[i] << endl;
             return 0;
@@ -64,14 +65,14 @@ int main(void) {
     float *dst = (float *)malloc(dst_alloc);
     memset(src, 0, src_alloc);
     
-    for (int i =0; i < SRC_SIZE; i++) {
+    for (auto i =0; i < SRC_SIZE; i++) {
         src[i] = i+0.1f;
     }
-    clock_t start = clock();
+    clock_t start = seconds();
     serial(src, dst, DST_SIZE);
-    cout << ((double)(clock()-start)) / CLOCKS_PER_SEC << endl;
+    cout << ((double)(seconds()-start)) << endl;
     cout << "from cpu" << endl;
-    // output_dst(dst, DST_SIZE);
+    output_dst(dst, DST_SIZE);
     float *cpures = (float *)malloc(dst_alloc);
     memcpy(cpures, dst, dst_alloc);
 
@@ -86,15 +87,15 @@ int main(void) {
     int num_blocks = (DST_SIZE + num_threads -1) / num_threads; 
     dim3 blocks(num_blocks);
     dim3 threads(num_threads);
-    start = clock();
+    start = seconds();
     conv<<<blocks, threads>>>(d_src, d_dst, DST_SIZE);
     cudaDeviceSynchronize();
-    cout << ((double)(clock()-start)) / CLOCKS_PER_SEC << endl;
+    cout << ((double)(seconds()-start)) << endl;
 
     float *gpures = (float *)malloc(dst_alloc);
     cudaMemcpy(gpures, d_dst, dst_alloc, cudaMemcpyDeviceToHost);
     cout << "from gpu" << endl;
-    // output_dst(gpures, DST_SIZE);
+    output_dst(gpures, DST_SIZE);
     if (checkResult(cpures, gpures, DST_SIZE)) {
         cout << "passed" << endl;
     }

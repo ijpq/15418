@@ -1,13 +1,15 @@
-#define SRC_SIZE 1000
+#define SRC_SIZE 10
+#define THREADS_PER_BLOCK 256
 #define DST_SIZE (SRC_SIZE - 2)
 #include <iostream>
 #include <time.h>
+#include "../../parallelreduce/common/common.h"
 
 using namespace std;
-__global__ void conv(float *src, float *dst, int dst_N) {
+__global__ void conv(float *src, float *dst, size_t dst_N) {
 
     // mapping threads to dst data
-    int thd = threadIdx.x + blockDim.x * blockIdx.x;
+    size_t thd = threadIdx.x + blockDim.x * blockIdx.x;
     if (thd >= dst_N) return ; 
     dst[thd] = (src[thd] + src[thd+1] + src[thd+2]) / 3.f;
     return ;
@@ -37,12 +39,12 @@ int main(void) {
     float *dst = (float *)malloc(dst_alloc);
     memset(src, 0, src_alloc);
     
-    for (int i =0; i < SRC_SIZE; i++) {
+    for (auto i =0; i < SRC_SIZE; i++) {
         src[i] = i+0.1f;
     }
-    clock_t start = clock();
+    clock_t start = seconds();
     serial(src, dst, DST_SIZE);
-    cout << ((double)(clock()-start)) / CLOCKS_PER_SEC << endl;
+    cout << ((double)(seconds()-start))   << endl;
     cout << "from cpu" << endl;
     output_dst(dst, DST_SIZE);
 
@@ -53,14 +55,14 @@ int main(void) {
     cudaMemcpy(d_src, src, src_alloc, cudaMemcpyHostToDevice);
 
     memset(dst, 0, dst_alloc);
-    int num_threads = 256;
+    int num_threads = THREADS_PER_BLOCK;
     int num_blocks = (DST_SIZE + num_threads -1) / num_threads; 
     dim3 blocks(num_blocks);
     dim3 threads(num_threads);
-    start = clock();
+    start = seconds();
     conv<<<blocks, threads>>>(d_src, d_dst, DST_SIZE);
     cudaDeviceSynchronize();
-    cout << ((double)(clock()-start)) / CLOCKS_PER_SEC << endl;
+    cout << ((double)(seconds()-start))  << endl;
     cudaMemcpy(dst, d_dst, dst_alloc, cudaMemcpyDeviceToHost);
     cout << "from gpu" << endl;
     output_dst(dst, DST_SIZE);
