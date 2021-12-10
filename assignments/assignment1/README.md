@@ -90,9 +90,11 @@ void absVector(float* values, float* output, int N) {
 3. 加分作业 TODO...
 
 # prob3
-在prob1中，每一个线程调用一个core。在prob3中，使用ISPC来实现。在mandelbrot图计算这个例子中，每个像素点的计算都是独立的过程，基于这些前提条件，ISPC编译器负责构建程序，来尽可能高效地调用CPU的并行资源。
+
+在prob1中，每一个线程调用一个core。在prob3中，使用ISPC来实现。在mandelbrot图计算这个例子中，每个像素点的计算都是独立的过程，基于这些前提条件，ISPC编译器负责构建程序，来尽可能高效地调用CPU的并行资源。**problem3中程序的正确性可以保证，但效率上存在问题，你需要做的是fix这个问题，以获得比串行计算高20%的加速比**
 
 ## part1
+
 ispc看起来像cpp,但实际有区别。不同于C的是，ISPC程序的多个进行并行的运行CPU中的SIMD指令，并行的进程数取决于编译器。因此，从C的代码中调用ISPC
 的API就像产生了一组并行的ispc进程。这些并发的进程都运行完以后，再返回到C的代码中。
 
@@ -109,8 +111,23 @@ ispc提供的功能可以减少对于如何split任务的思考
 
 **需要做的事**
 
-编译运行mandelbrot.ispc，ispc编译器配置为使用8bit宽的向量指令。你期望你的cpu能达到的最大加速比是多少？为什么实际效果比这个预估的加速比低？
+编译运行mandelbrot.ispc，ispc编译器配置为使用8bit宽的向量指令。你期望你的cpu能达到的最大加速比是多少？为什么实际效果比这个预估的加速比低？（考虑一下你正在进行的计算的特点；图片的哪一部分对于SIMD指令是最难的；对比一下不同的图view1~6，可能会验证你的假设）
 
 **提醒**
 
-ispc编译器在一个core上使用simd指令，这种并行方式与prog1是不同的，prog1是并发了多个线程，每个线程使用一个core。
+ispc编译器map的一个gang的实例是在一个core上使用simd指令，这种并行方式与prog1是不同的，prog1是并发了多个线程，每个线程使用一个core。
+
+
+
+## part2
+
+foreach利用的是simd，而ispc提供的launch利用的是多核，具体通过称为task的东西，类似线程。每一个task定义了一种计算，这部分计算由一个gang通过SIMD的方式来完成。正如函数mandelbrot_ispc_task()，每一个task计算全图的一部分。与foreach相似的是，task也是可以按任意顺序执行的。
+
+所以launch和foreach都非固定顺序执行的
+
+**需要做的事**
+
+* 运行mandelbrot_ispc并设定不同的tasks，对于图1来说，不同的tasks数能获得什么加速比？与foreach这种不适用tasks的实现方法，现在的实现方法的加速比更高了还是如何？
+* 最简单的提高加速比的方式是增加tasks数量，但是如何确定应该创建多少个tasks？对于你的任务来说，多少的tasks是最好的？只是修改代码中的mandelbrot_ispc_withtasks()函数，你应该能获得20-22倍的加速比(注意处理图片的高不能被整除的情况)
+* extra credict
+
