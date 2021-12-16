@@ -117,8 +117,6 @@ ispc提供的功能可以减少对于如何split任务的思考
 
 ispc编译器map的一个gang的实例是在一个core上使用simd指令，这种并行方式与prog1是不同的，prog1是并发了多个线程，每个线程使用一个core。
 
-
-
 ## part2
 
 foreach利用的是simd，而ispc提供的launch利用的是多核，具体通过称为task的东西，类似线程。每一个task定义了一种计算，这部分计算由一个gang通过SIMD的方式来完成。正如函数mandelbrot_ispc_task()，每一个task计算全图的一部分。与foreach相似的是，task也是可以按任意顺序执行的。
@@ -130,4 +128,48 @@ foreach利用的是simd，而ispc提供的launch利用的是多核，具体通�
 * 运行mandelbrot_ispc并设定不同的tasks，对于图1来说，不同的tasks数能获得什么加速比？与foreach这种不适用tasks的实现方法，现在的实现方法的加速比更高了还是如何？
 * 最简单的提高加速比的方式是增加tasks数量，但是如何确定应该创建多少个tasks？对于你的任务来说，多少的tasks是最好的？只是修改代码中的mandelbrot_ispc_withtasks()函数，你应该能获得20-22倍的加速比(注意处理图片的高不能被整除的情况)
 * extra credict
+
+## 其他问题
+
+为什么需要launch和foreach两种机制？为什么不能通过foreach直接实现在多核上实现SIMD?
+
+A: 需要看lectures
+
+
+
+# prob4
+
+prob4实现的是开方运算，计算两千万(2e7)个0~3之间的数字的平方根。对于一个数字s,使用迭代牛顿法去计算$1/x^2=s$,求得$x \approx \sqrt{1 / s}$,再给x乘上s得到s的平方根。下图展示了0~3之间数字收敛到精确解所需要的迭代次数。
+
+![image-20211212172435417](https://tva1.sinaimg.cn/large/008i3skNly1gxb6coq6mvj30ic0a1aab.jpg)
+
+**需要做的事**
+
+* build run sqrt。对比ispc不用task和用了task的加速比之间的差异。由SIMD带来的加速比是多少？由多核带来的加速比是多少？
+* 更改data.cpp中的initGood()，用来生成数据以获得相对更高的加速比。描述：为什么这样的数据（在带task和不带task时）会获得相比串行实现最大的加速比？使用`--data g`来测试不同输入数据的加速比结果。做了这种更改后，是否能提高SIMD的加速效果？是否能提高多核的加速效果？解释一下为什么？
+* 更改data.cpp中的initBad()，相比不带task的SIMD实现，将会生成数据导致非常低的加速比。解释一下为什么相比串行实现，这种输入数据会导致SIMD（带task和不带task）获得相对低的加速比？使用`--data b`来进行测试。这种更改的输入数据能否提高多核的加速比？为什么？
+
+**注意**：当运行good输入数据版本时，多核执行的收益是什么？你可能会发现这个加速比非常高，**这是intel 超线程技术的效果**
+
+## writeup
+
+看不懂课程给出的迭代计算方法，更改为如下：
+
+![image-20211213163243208](https://tva1.sinaimg.cn/large/008i3skNly1gxcah0rlnrj30ge0ba3zh.jpg)
+
+统计迭代次数结果如下：
+
+![iter_counts](https://tva1.sinaimg.cn/large/008i3skNly1gxftxvrx1wj30rs0go0tx.jpg)
+
+bad init选择0.001f, good init选择1.001f;
+
+bad init导致的串行计算时间增加不明显,只比随机初始化增加了3.5%.
+
+
+
+![image-20211216180940468](https://tva1.sinaimg.cn/large/008i3skNly1gxfu4sdmiyj30fk07mjs9.jpg)
+
+如果我们把bad init降低为0.00001f，则会出现求解错误，这应该是计算误差导致的
+
+![image-20211216181423025](https://tva1.sinaimg.cn/large/008i3skNly1gxfu9oy9z2j30af08ljsk.jpg)
 
