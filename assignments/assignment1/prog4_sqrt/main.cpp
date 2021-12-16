@@ -3,15 +3,27 @@
 #include <pthread.h>
 #include <math.h>
 #include <getopt.h>
+#include <vector>
 
 #include "CycleTimer.h"
 #include "sqrt_ispc.h"
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/plot.hpp>
+
+#define CVPLOT_HEADER_ONLY
+#include <CvPlot/cvplot.h>
 
 using namespace ispc;
+using namespace std;
+using namespace cv;
 
 typedef enum { DATA_RANDOM, DATA_GOOD, DATA_BAD } data_t;
 
-extern void sqrtSerial(int N, float startGuess, float* values, float* output);
+extern void sqrtSerial(int N, float startGuess, float* values, float* output, vector<double> &);
 
 extern void initRandom(float *values, int N);
 extern void initGood(float *values, int N);
@@ -33,14 +45,38 @@ static void verifyResult(int N, float* result, float* gold) {
     }
 }
 
+void matplotlibPlot(const int &N, float *values, vector<double> &iter_times) {
+    for (auto i = 0; i < N; i++) {
+        iter_times[i] /= 3.f;
+    }
+    vector<double> vals(values, values+N);
+    Mat x(vals, CV_64F);
+    Mat y(iter_times, CV_64F);
+    Size x_size = x.size();
+    Size y_size = y.size();
+    cout << "x,y:" << x_size << "," << y_size << endl;
+    
+    // Mat image(600, 800, CV_64F);
+    Mat3b image(600, 1000);
+    auto axes = CvPlot::plot(vals, iter_times, "o");
+    axes.render(image);
+    // Ptr<plot::Plot2d> plot = plot::Plot2d::create(x, y);
+    // plot->render(image);
+    bool save_status = imwrite("/home/tangke/iter_counts.png", image);
+    cout << "save image status:" << save_status << endl;
+    return ;
+}
+
 int main(int argc, char *argv[]) {
 
-    const int N = 20 * 1000 * 1000;
+    const int N = 20 *1000 * 1000;
     const float initialGuess = 1.0f;
 
     float* values = new float[N];
     float* output = new float[N];
     float* gold = new float[N];
+    vector<double> iter_times(N, 0);
+    
 
     data_t dmode = DATA_RANDOM;
 
@@ -106,10 +142,11 @@ int main(int argc, char *argv[]) {
     double minSerial = 1e30;
     for (int i = 0; i < 3; ++i) {
         double startTime = CycleTimer::currentSeconds();
-        sqrtSerial(N, initialGuess, values, output);
+        sqrtSerial(N, initialGuess, values, output, iter_times);
         double endTime = CycleTimer::currentSeconds();
         minSerial = std::min(minSerial, endTime - startTime);
     }
+    // matplotlibPlot(N, values, iter_times);
 
     printf("[sqrt serial]:\t\t[%.3f] ms\n", minSerial * 1000);
 
@@ -148,6 +185,7 @@ int main(int argc, char *argv[]) {
 
     printf("[sqrt task ispc]:\t[%.3f] ms\n", minTaskISPC * 1000);
 
+    // FIXME: ISPC with task contains bugs.
     verifyResult(N, output, gold);
 
     printf("\t\t\t\t(%.2fx speedup from ISPC)\n", minSerial/minISPC);

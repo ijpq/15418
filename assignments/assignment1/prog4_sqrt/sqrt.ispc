@@ -11,14 +11,17 @@ export void sqrt_ispc(uniform int N,
         float x = values[i];
         float guess = initialGuess;
 
-        float pred = abs(guess * guess * x - 1.f);
+        float pred = abs(abs(guess * guess - x) - 0.f);
+        // float pred = abs(guess * guess * x - 1.f);
 
         while (pred > kThreshold) {
-            guess = (3.f * guess - x * guess * guess * guess) * 0.5f;
-            pred = abs(guess * guess * x - 1.f);
+            guess = (x + guess * guess) / (2.f * guess);
+            pred = abs(abs(guess * guess - x) - 0.f);
+            // guess = (3.f * guess - x * guess * guess * guess) * 0.5f;
+            // pred = abs(guess * guess * x - 1.f);
         }
 
-        output[i] = x * guess;
+        output[i] = guess;
         
     }
 }
@@ -38,14 +41,17 @@ task void sqrt_ispc_task(uniform int N,
         float x = values[i];
         float guess = initialGuess;
 
-        float pred = abs(guess * guess * x - 1.f);
+        float pred = abs(abs(guess * guess - x) - 0.f);
+        // float pred = abs(guess * guess * x - 1.f);
 
         while (pred > kThreshold) {
-            guess = (3.f * guess - x * guess * guess * guess) * 0.5f;
-            pred = abs(guess * guess * x - 1.f);
+            guess = (x + guess * guess) / (2.f * guess);
+            pred = abs(abs(guess * guess - x) - 0.f);
+            // guess = (3.f * guess - x * guess * guess * guess) * 0.5f;
+            // pred = abs(guess * guess * x - 1.f);
         }
 
-        output[i] = x * guess;
+        output[i] = guess;
     
     }
 }

@@ -1,8 +1,14 @@
-CXX=g++ -m64
+CXX=g++ -m64 --std=c++11
+# CXXFLAGS=-I../common -I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_dnn -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -Iobjs/ -O3 -Wall
 CXXFLAGS=-I../common -Iobjs/ -O3 -Wall
+
 ISPC=ispc
 # note: change target to avx for AVX capable machines
 ISPCFLAGS=-O2 --target=avx2-i32x8 --arch=x86-64
+
+OPENCV_INCLUDES=`pkg-config --cflags opencv4`
+OPENCV_LIBS=`pkg-config --libs opencv4`
+CVPLOT_INCLUDES=-I/home/tangke/15418/cv-plot-1.2.2/CvPlot/inc
 
 APP_NAME=sqrt
 OBJDIR=objs
@@ -28,10 +34,10 @@ clean:
 OBJS=$(OBJDIR)/main.o $(OBJDIR)/sqrtSerial.o $(OBJDIR)/data.o $(OBJDIR)/sqrt_ispc.o $(PPM_OBJ) $(TASKSYS_OBJ)
 
 $(APP_NAME): dirs $(OBJS)
-		$(CXX) $(CXXFLAGS) -o $@ $(OBJS) -lm $(TASKSYS_LIB)
+		$(CXX) $(CXXFLAGS) $(OPENCV_INCLUDES) $(CVPLOT_INCLUDES) -o $@ $(OBJS) /home/tangke/opencv_contrib-master/modules/plot/samples/plot.o -lm $(TASKSYS_LIB) $(OPENCV_LIBS)
 
 $(OBJDIR)/%.o: %.cpp
-		$(CXX) $< $(CXXFLAGS) -c -o $@
+		$(CXX) $(OPENCV_INCLUDES) $(CVPLOT_INCLUDES) $< $(CXXFLAGS) $(OPENCV_LIBS) -c -o $@ 
 
 $(OBJDIR)/%.o: $(COMMONDIR)/%.cpp
 	$(CXX) $< $(CXXFLAGS) -c -o $@

@@ -68,8 +68,8 @@ export void mandelbrot_ispc_withtasks(uniform float x0, uniform float y0,
                                       uniform int output[])
 {
 
-    uniform int threadCount = 6;
-    uniform int rowsPerTask = height / threadCount;
+    uniform int threadCount = 12;
+    uniform int rowsPerTask = (height + threadCount - 1) / threadCount;
 
     // create threadCount tasks
     launch[threadCount] mandelbrot_ispc_task(x0, y0, x1, y1,
