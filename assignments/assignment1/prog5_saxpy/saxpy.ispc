@@ -27,7 +27,7 @@ task void saxpy_ispc_task(uniform int N,
 }
 
 export void saxpy_ispc_withtasks(uniform int N,
-                               uniform float scale,
+                               uniform float scale[],
                                uniform float X[],
                                uniform float Y[],
                                uniform float result[])

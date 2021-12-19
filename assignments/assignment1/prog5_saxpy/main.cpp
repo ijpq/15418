@@ -27,6 +27,8 @@ int main() {
     const unsigned int TOTAL_FLOPS = N;
 
     float scale = 2.f;
+    // float *scale = new float[N];
+    float scale_plain = 2.f;
 
     float* arrayX = new float[N];
     float* arrayY = new float[N];
@@ -37,6 +39,7 @@ int main() {
     {
         arrayX[i] = i;
         arrayY[i] = i;
+        scale[i] = 2.f;
         result[i] = 0.f;
     }
 
@@ -47,7 +50,7 @@ int main() {
     double minSerial = 1e30;
     for (int i = 0; i < 3; ++i) {
         double startTime =CycleTimer::currentSeconds();
-        saxpySerial(N, scale, arrayX, arrayY, result);
+        saxpySerial(N, scale_plain, arrayX, arrayY, result);
         double endTime = CycleTimer::currentSeconds();
         minSerial = std::min(minSerial, endTime - startTime);
     }
@@ -68,7 +71,7 @@ int main() {
     double minStreaming = 1e30;
     for (int i = 0; i < 3; ++i) {
         double startTime =CycleTimer::currentSeconds();
-        saxpyStreaming(N, scale, arrayX, arrayY, result);
+        saxpyStreaming(N, scale_plain, arrayX, arrayY, result);
         double endTime = CycleTimer::currentSeconds();
         minStreaming = std::min(minStreaming, endTime - startTime);
     }

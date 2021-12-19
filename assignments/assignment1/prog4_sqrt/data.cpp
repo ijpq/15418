@@ -14,7 +14,7 @@ void initGood(float *values, int N) {
     for (int i=0; i<N; i++)
     {
         // Todo: Choose values
-        values[i] = 1.f + 0.001f;
+        values[i] = 1.f + 0.00001f;
     }
 }
 
@@ -23,7 +23,7 @@ void initBad(float *values, int N) {
     for (int i=0; i<N; i++)
     {
         // Todo: Choose values
-        values[i] = 0.00001f;
+        values[i] = 3.f - 0.00001f;
     }
 }
 
