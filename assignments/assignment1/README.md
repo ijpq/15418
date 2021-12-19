@@ -207,3 +207,30 @@ badinit 3.0f -0.00001f; goodinit 1.0f+0.00001f;
 
 ![image-20211216210905832](https://tva1.sinaimg.cn/large/008i3skNly1gxfzbhf12oj315q0ewdim.jpg)
 
+# prog5
+
+**需要做的事**
+
+1. build and run saxpy.使用task的ispc能获得多少加速比？解释这个加速比的估计方法。还能提高吗，比如通过修改代码获得近似线性的加速比。验证你的实现。需要考虑内存带宽和浮点数计算的cost。
+
+2. extra:虽然在每一步计算过程中，分别读取一个x和一个y然后把结算结果写回，但是 `main.cpp`中计算的整个数据的内存占用$4*N*sizeof(float)$​字节。为什么`main.cpp`的计算结果是正确的？
+
+3. extra:基于现在对cpu和ram的理解，问题1中的回答是完全正确的吗？
+4. extra: 提高saxpy的性能，通过内存占用减少到3N。修改`saxpyStreaming()`代码来实现，需要使用intel内置的`non-temporal memory hint`
+
+## writeup
+
+1. 在不带task的ispc实现中应该能获得$N/(N/8)$​​​的加速比，即8​​​的加速比，但实际只有1。不带task的ispc配置中，内存访问速度和浮点数运算速度都和串行实现相同。
+
+   ![image-20211219204435166](https://tva1.sinaimg.cn/large/008i3skNly1gxjfgwjvwmj30g0038dg4.jpg)
+
+   通过将scale修改为相同尺寸的矩阵，加速比反而更低
+
+   ![image-20211219204901931](https://tva1.sinaimg.cn/large/008i3skNly1gxjfliuzo6j30es03ngm1.jpg)
+
+   这应该是因为scale已经被定义为uniform，这个数据对于一个gang中的所有instance是相同的内存位置(共享访问)。所以对于SIMD来说，同一条指令访问相同的内存位置速度是快的.
+
+2. 起初才想是因为对应每个位置进行$*scale$​​计算时，需要互相独立，减少共享内存访问的延迟。
+
+   但经过实验发现，加速比反而更低了。或许是计算$scale*X+Y$时，计算乘积后需要保存结果。
+
