@@ -153,6 +153,8 @@ prob4实现的是开方运算，计算两千万(2e7)个0~3之间的数字的平�
 
 ## writeup
 
+实现时，badinit的理解是增加了串行的迭代次数，goodinit的减少了串行的迭代次数。
+
 拟牛顿法求解有两种形式，从代数上是等价的，但数值上可能存在误差，分别如下：
 
 ### method1
@@ -167,7 +169,7 @@ prob4实现的是开方运算，计算两千万(2e7)个0~3之间的数字的平�
 
 ### method2
 
-**TODO:code**
+<img src="https://tva1.sinaimg.cn/large/008i3skNly1gxgo3g02zwj30xo0nago1.jpg" alt="image-20211217112620978" style="zoom:50%;" />
 
 统计迭代次数结果如下：
 
@@ -189,8 +191,19 @@ bad init导致的串行计算时间增加不明显,只比随机初始化增加�
 
 ![image-20211216181423025](https://tva1.sinaimg.cn/large/008i3skNly1gxfu9oy9z2j30af08ljsk.jpg)
 
+修改计算方法为只使用一个fabs，仍然出现计算错误
+
+![image-20211219191920589](https://tva1.sinaimg.cn/large/008i3skNly1gxjd08qcg3j30ge09x0tg.jpg)
+
+**估计的原因是，两种迭代实现方法存在细微的计算误差。使用method1的方法时，不是因为abs导致的误差**
+
+
+
 ### 在method2的设定下:
 
-可以看到，串行所需要的iter增加了很多，但是通过ispc，可以获得更好的加速效果
+badinit 3.0f -0.00001f; goodinit 1.0f+0.00001f;
+
+可以看到，badinit时串行所需要的iter增加了很多。但是通过ispc，可以获得更好的加速效果。goodinit时，所需要的迭代数本来就少，通过ispc获得的加速比就不显著了。
 
 ![image-20211216210905832](https://tva1.sinaimg.cn/large/008i3skNly1gxfzbhf12oj315q0ewdim.jpg)
+
