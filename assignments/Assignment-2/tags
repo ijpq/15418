@@ -1,0 +1,183 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+-exclude	Makefile	/^	tar cvf handin.tar saxpy scan render Makefile --exclude='render\/snow.par'$/;"	m
+ARCH	render/Makefile	/^ARCH=$(shell uname | sed -e 's\/-.*\/\/g')$/;"	m
+ARCH	saxpy/Makefile	/^ARCH=$(shell uname | sed -e 's\/-.*\/\/g')$/;"	m
+BIG_LITTLE	render/circleRenderer.h	/^    BIG_LITTLE,$/;"	e	enum:__anon1
+BOUNCING_BALLS	render/circleRenderer.h	/^    BOUNCING_BALLS,$/;"	e	enum:__anon1
+CC_FILES	render/Makefile	/^CC_FILES   := main.cpp display.cpp benchmark.cpp refRenderer.cpp \\$/;"	m
+CC_FILES	saxpy/Makefile	/^CC_FILES   := main.cpp$/;"	m
+CC_FILES	scan/Makefile	/^CC_FILES   := main.cpp$/;"	m
+CIRCLE_RGB	render/circleRenderer.h	/^    CIRCLE_RGB,$/;"	e	enum:__anon1
+CIRCLE_RGBY	render/circleRenderer.h	/^    CIRCLE_RGBY,$/;"	e	enum:__anon1
+CIRCLE_TEST_100K	render/circleRenderer.h	/^    CIRCLE_TEST_100K,$/;"	e	enum:__anon1
+CIRCLE_TEST_10K	render/circleRenderer.h	/^    CIRCLE_TEST_10K,$/;"	e	enum:__anon1
+CLAMP	render/util.h	6;"	d
+CU_DEPS	render/Makefile	/^CU_DEPS    :=$/;"	m
+CU_DEPS	saxpy/Makefile	/^CU_DEPS    :=$/;"	m
+CU_DEPS	scan/Makefile	/^CU_DEPS    :=$/;"	m
+CU_FILES	render/Makefile	/^CU_FILES   := cudaRenderer.cu$/;"	m
+CU_FILES	saxpy/Makefile	/^CU_FILES   := saxpy.cu$/;"	m
+CU_FILES	scan/Makefile	/^CU_FILES   := scan.cu$/;"	m
+CXX	render/Makefile	/^CXX=g++ -m64$/;"	m
+CXX	saxpy/Makefile	/^CXX=g++ -m64$/;"	m
+CXX	scan/Makefile	/^CXX=g++ -m64$/;"	m
+CXXFLAGS	render/Makefile	/^CXXFLAGS=-O3 -Wall -g$/;"	m
+CXXFLAGS	saxpy/Makefile	/^CXXFLAGS=-O3 -Wall$/;"	m
+CXXFLAGS	scan/Makefile	/^CXXFLAGS=-O3 -Wall$/;"	m
+CircleRenderer	render/circleRenderer.h	/^class CircleRenderer {$/;"	c
+CudaRenderer	render/cudaRenderer.h	/^class CudaRenderer : public CircleRenderer {$/;"	c
+CycleTimer	render/cycleTimer.h	/^class CycleTimer {$/;"	c
+CycleTimer	saxpy/CycleTimer.h	/^class CycleTimer {$/;"	c
+CycleTimer	scan/CycleTimer.h	/^class CycleTimer {$/;"	c
+EXECUTABLE	render/Makefile	/^EXECUTABLE := render$/;"	m
+EXECUTABLE	saxpy/Makefile	/^EXECUTABLE := cudaSaxpy$/;"	m
+EXECUTABLE	scan/Makefile	/^EXECUTABLE := cudaScan$/;"	m
+FIREWORKS	render/circleRenderer.h	/^    FIREWORKS,$/;"	e	enum:__anon1
+FRAMEWORKS	render/Makefile	/^FRAMEWORKS :=$/;"	m
+HOSTNAME	render/Makefile	/^HOSTNAME=$(shell hostname)$/;"	m
+HYPNOSIS	render/circleRenderer.h	/^    HYPNOSIS,$/;"	e	enum:__anon1
+Image	render/image.h	/^    Image(int w, int h) {$/;"	f	struct:Image
+Image	render/image.h	/^struct Image {$/;"	s
+LDFLAGS	render/Makefile	/^LDFLAGS=-L\/usr\/local\/depot\/cuda-10.2\/lib64\/ -lcudart$/;"	m
+LDFLAGS	saxpy/Makefile	/^LDFLAGS=-L\/usr\/local\/depot\/cuda-10.2\/lib64\/ -lcudart$/;"	m
+LDFLAGS	scan/Makefile	/^LDFLAGS=-L\/usr\/local\/depot\/cuda-10.2\/lib64\/ -lcudart$/;"	m
+LDFRAMEWORKS	render/Makefile	/^LDFRAMEWORKS := $(addprefix -framework , $(FRAMEWORKS))$/;"	m
+LDLIBS	render/Makefile	/^LDLIBS  := $(addprefix -l, $(LIBS))$/;"	m
+LIBS	render/Makefile	/^LIBS       :=$/;"	m
+LITTLE_BIG	render/circleRenderer.h	/^    LITTLE_BIG$/;"	e	enum:__anon1
+LOGS	render/Makefile	/^LOGS	   := logs$/;"	m
+NUM_FIREWORKS	render/circleRenderer.h	7;"	d
+NUM_SPARKS	render/circleRenderer.h	8;"	d
+NVCC	render/Makefile	/^NVCC=nvcc$/;"	m
+NVCC	saxpy/Makefile	/^NVCC=nvcc$/;"	m
+NVCC	scan/Makefile	/^NVCC=nvcc$/;"	m
+NVCCFLAGS	render/Makefile	/^NVCCFLAGS=-O3 -m64 --gpu-architecture compute_61 -ccbin \/usr\/bin\/gcc$/;"	m
+NVCCFLAGS	saxpy/Makefile	/^NVCCFLAGS=-O3 -m64 --gpu-architecture compute_61 -ccbin \/usr\/bin\/gcc$/;"	m
+NVCCFLAGS	scan/Makefile	/^NVCCFLAGS=-O3 -m64 --gpu-architecture compute_61 -ccbin \/usr\/bin\/gcc$/;"	m
+Noise1DValueTable	render/noise.cpp	/^static float Noise1DValueTable[] = {$/;"	v	file:
+NoiseXPermutationTable	render/noise.cpp	/^static int NoiseXPermutationTable[] = {$/;"	v	file:
+NoiseYPermutationTable	render/noise.cpp	/^static int NoiseYPermutationTable[] = {$/;"	v	file:
+OBJDIR	render/Makefile	/^OBJDIR=objs$/;"	m
+OBJDIR	saxpy/Makefile	/^OBJDIR=objs$/;"	m
+OBJDIR	scan/Makefile	/^OBJDIR=objs$/;"	m
+OBJS	render/Makefile	/^OBJS=$(OBJDIR)\/main.o $(OBJDIR)\/display.o $(OBJDIR)\/benchmark.o $(OBJDIR)\/refRenderer.o \\$/;"	m
+OBJS	saxpy/Makefile	/^OBJS=$(OBJDIR)\/main.o  $(OBJDIR)\/saxpy.o$/;"	m
+OBJS	scan/Makefile	/^OBJS=$(OBJDIR)\/main.o  $(OBJDIR)\/scan.o$/;"	m
+PATTERN	render/circleRenderer.h	/^    PATTERN,$/;"	e	enum:__anon1
+RefRenderer	render/refRenderer.cpp	/^RefRenderer::RefRenderer() {$/;"	f	class:RefRenderer
+RefRenderer	render/refRenderer.h	/^class RefRenderer : public CircleRenderer {$/;"	c
+SNOWFLAKES	render/circleRenderer.h	/^    SNOWFLAKES,$/;"	e	enum:__anon1
+SNOWFLAKES_SINGLE_FRAME	render/circleRenderer.h	/^    SNOWFLAKES_SINGLE_FRAME,$/;"	e	enum:__anon1
+SceneName	render/circleRenderer.h	/^} SceneName;$/;"	t	typeref:enum:__anon1
+SysClock	render/cycleTimer.h	/^    typedef unsigned long long SysClock;$/;"	t	class:CycleTimer
+SysClock	saxpy/CycleTimer.h	/^    typedef unsigned long long SysClock;$/;"	t	class:CycleTimer
+SysClock	scan/CycleTimer.h	/^    typedef unsigned long long SysClock;$/;"	t	class:CycleTimer
+_SYRAH_CYCLE_TIMER_H_	render/cycleTimer.h	2;"	d
+_SYRAH_CYCLE_TIMER_H_	saxpy/CycleTimer.h	2;"	d
+_SYRAH_CYCLE_TIMER_H_	scan/CycleTimer.h	2;"	d
+_USE_MATH_DEFINES	render/refRenderer.cpp	2;"	d	file:
+_USE_MATH_DEFINES	render/sceneLoader.cpp	1;"	d	file:
+__CIRCLE_RENDERER_H__	render/circleRenderer.h	2;"	d
+__CUDA_RENDERER_H__	render/cudaRenderer.h	2;"	d
+__IMAGE_H__	render/image.h	2;"	d
+__NOISE_H__	render/noise.h	2;"	d
+__PLATFORM_GL_H__	render/platformgl.h	2;"	d
+__PPM_H__	render/ppm.h	2;"	d
+__REF_RENDERER_H__	render/refRenderer.h	2;"	d
+__SCENE_LOADER_H__	render/sceneLoader.h	2;"	d
+__UTIL_H__	render/util.h	2;"	d
+advanceAnimation	render/refRenderer.cpp	/^void RefRenderer::advanceAnimation() {$/;"	f	class:RefRenderer
+allocOutputImage	render/refRenderer.cpp	/^void RefRenderer::allocOutputImage(int width, int height) {$/;"	f	class:RefRenderer
+changeCircles	render/sceneLoader.cpp	/^static void changeCircles(int numCircles, float *position, float *radius,$/;"	f	file:
+checkBenchmark	render/benchmark.cpp	/^void checkBenchmark(CircleRenderer *ref_renderer, CircleRenderer *cuda_renderer, int startFrame, int totalFrames,$/;"	f
+clear	render/image.h	/^    void clear(float r, float g, float b, float a) {$/;"	f	struct:Image
+clearImage	render/refRenderer.cpp	/^void RefRenderer::clearImage() {$/;"	f	class:RefRenderer
+color	render/cudaRenderer.h	/^    float *color;$/;"	m	class:CudaRenderer
+color	render/refRenderer.h	/^    float *color;$/;"	m	class:RefRenderer
+compare_images	render/benchmark.cpp	/^static void compare_images(const Image *ref_image, const Image *cuda_image) {$/;"	f	file:
+cpu_exclusive_scan	scan/main.cpp	/^void cpu_exclusive_scan(int *start, int *end, int *output) {$/;"	f
+cpu_find_peaks	scan/main.cpp	/^int cpu_find_peaks(int *start, int length, int *output) {$/;"	f
+cudaDeviceColor	render/cudaRenderer.h	/^    float *cudaDeviceColor;$/;"	m	class:CudaRenderer
+cudaDeviceImageData	render/cudaRenderer.h	/^    float *cudaDeviceImageData;$/;"	m	class:CudaRenderer
+cudaDevicePosition	render/cudaRenderer.h	/^    float *cudaDevicePosition;$/;"	m	class:CudaRenderer
+cudaDeviceRadius	render/cudaRenderer.h	/^    float *cudaDeviceRadius;$/;"	m	class:CudaRenderer
+cudaDeviceVelocity	render/cudaRenderer.h	/^    float *cudaDeviceVelocity;$/;"	m	class:CudaRenderer
+currentSeconds	render/cycleTimer.h	/^    static double currentSeconds() { return currentTicks() * secondsPerTick(); }$/;"	f	class:CycleTimer
+currentSeconds	saxpy/CycleTimer.h	/^    static double currentSeconds() { return currentTicks() * secondsPerTick(); }$/;"	f	class:CycleTimer
+currentSeconds	scan/CycleTimer.h	/^    static double currentSeconds() { return currentTicks() * secondsPerTick(); }$/;"	f	class:CycleTimer
+currentTicks	render/cycleTimer.h	/^    static SysClock currentTicks() {$/;"	f	class:CycleTimer
+currentTicks	saxpy/CycleTimer.h	/^    static SysClock currentTicks() {$/;"	f	class:CycleTimer
+currentTicks	scan/CycleTimer.h	/^    static SysClock currentTicks() {$/;"	f	class:CycleTimer
+data	render/image.h	/^    float *data;$/;"	m	struct:Image
+dumpParticles	render/refRenderer.cpp	/^void RefRenderer::dumpParticles(const char *filename) {$/;"	f	class:RefRenderer
+gDisplay	render/display.cpp	/^} gDisplay;$/;"	v	typeref:struct:__anon2	file:
+generateRandomCircles	render/sceneLoader.cpp	/^static void generateRandomCircles(int numCircles, float *position, float *velocity,$/;"	f	file:
+generateSizeCircles	render/sceneLoader.cpp	/^static void generateSizeCircles(int numCircles, float *position, float *velocity,$/;"	f	file:
+getImage	render/refRenderer.cpp	/^const Image *RefRenderer::getImage() { return image; }$/;"	f	class:RefRenderer
+getNoiseTables	render/noise.cpp	/^void getNoiseTables(int **permX, int **permY, float **value1D) {$/;"	f
+handleDisplay	render/display.cpp	/^void handleDisplay() {$/;"	f
+handleKeyPress	render/display.cpp	/^void handleKeyPress(unsigned char key, int x, int y) {$/;"	f
+handleReshape	render/display.cpp	/^void handleReshape(int w, int h) {$/;"	f
+height	render/display.cpp	/^    int height;$/;"	m	struct:__anon2	file:
+height	render/image.h	/^    int height;$/;"	m	struct:Image
+image	render/cudaRenderer.h	/^    Image *image;$/;"	m	class:CudaRenderer
+image	render/refRenderer.h	/^    Image *image;$/;"	m	class:RefRenderer
+lastFrameTime	render/display.cpp	/^    double lastFrameTime;$/;"	m	struct:__anon2	file:
+loadCircleScene	render/sceneLoader.cpp	/^void loadCircleScene(SceneName sceneName, int &numCircles, float *&position,$/;"	f
+loadScene	render/refRenderer.cpp	/^void RefRenderer::loadScene(SceneName scene) {$/;"	f	class:RefRenderer
+lookupColor	render/refRenderer.cpp	/^static inline void lookupColor(float coord, float &r, float &g, float &b) {$/;"	f	file:
+main	render/main.cpp	/^int main(int argc, char **argv) {$/;"	f
+main	saxpy/main.cpp	/^int main(int argc, char **argv) {$/;"	f
+main	scan/main.cpp	/^int main(int argc, char **argv) {$/;"	f
+makeCircleGrid	render/sceneLoader.cpp	/^static void makeCircleGrid(int startIndex, int circleCount, float circleRadius,$/;"	f	file:
+msPerTick	render/cycleTimer.h	/^    static double msPerTick() { return secondsPerTick() * 1000.0; }$/;"	f	class:CycleTimer
+msPerTick	saxpy/CycleTimer.h	/^    static double msPerTick() { return secondsPerTick() * 1000.0; }$/;"	f	class:CycleTimer
+msPerTick	scan/CycleTimer.h	/^    static double msPerTick() { return secondsPerTick() * 1000.0; }$/;"	f	class:CycleTimer
+numberOfCircles	render/cudaRenderer.h	/^    int numberOfCircles;$/;"	m	class:CudaRenderer
+numberOfCircles	render/refRenderer.h	/^    int numberOfCircles;$/;"	m	class:RefRenderer
+pauseSim	render/display.cpp	/^    bool pauseSim;$/;"	m	struct:__anon2	file:
+position	render/cudaRenderer.h	/^    float *position;$/;"	m	class:CudaRenderer
+position	render/refRenderer.h	/^    float *position;$/;"	m	class:RefRenderer
+printStats	render/display.cpp	/^    bool printStats;$/;"	m	struct:__anon2	file:
+radius	render/cudaRenderer.h	/^    float *radius;$/;"	m	class:CudaRenderer
+radius	render/refRenderer.h	/^    float *radius;$/;"	m	class:RefRenderer
+randomFloat	render/sceneLoader.cpp	/^static float randomFloat() { return static_cast<float>(rand()) \/ RAND_MAX; }$/;"	f	file:
+render	render/refRenderer.cpp	/^void RefRenderer::render() {$/;"	f	class:RefRenderer
+renderPicture	render/display.cpp	/^void renderPicture() {$/;"	f
+renderer	render/display.cpp	/^    CircleRenderer *renderer;$/;"	m	struct:__anon2	file:
+sceneName	render/cudaRenderer.h	/^    SceneName sceneName;$/;"	m	class:CudaRenderer
+sceneName	render/refRenderer.h	/^    SceneName sceneName;$/;"	m	class:RefRenderer
+secondsPerTick	render/cycleTimer.h	/^    static double secondsPerTick() {$/;"	f	class:CycleTimer
+secondsPerTick	saxpy/CycleTimer.h	/^    static double secondsPerTick() {$/;"	f	class:CycleTimer
+secondsPerTick	scan/CycleTimer.h	/^    static double secondsPerTick() {$/;"	f	class:CycleTimer
+setup	render/refRenderer.cpp	/^void RefRenderer::setup() {$/;"	f	class:RefRenderer
+shadePixel	render/refRenderer.cpp	/^void RefRenderer::shadePixel(float pixelCenterX, float pixelCenterY, float px, float py, float pz, float *pixelData,$/;"	f	class:RefRenderer
+startBenchmark	render/benchmark.cpp	/^void startBenchmark(CircleRenderer *renderer, int startFrame, int totalFrames, const std::string &frameFilename) {$/;"	f
+startRendererWithDisplay	render/display.cpp	/^void startRendererWithDisplay(CircleRenderer *renderer) {$/;"	f
+tickUnits	render/cycleTimer.h	/^    static const char *tickUnits() {$/;"	f	class:CycleTimer
+tickUnits	saxpy/CycleTimer.h	/^    static const char *tickUnits() {$/;"	f	class:CycleTimer
+tickUnits	scan/CycleTimer.h	/^    static const char *tickUnits() {$/;"	f	class:CycleTimer
+ticksPerSecond	render/cycleTimer.h	/^    static double ticksPerSecond() { return 1.0 \/ secondsPerTick(); }$/;"	f	class:CycleTimer
+ticksPerSecond	saxpy/CycleTimer.h	/^    static double ticksPerSecond() { return 1.0 \/ secondsPerTick(); }$/;"	f	class:CycleTimer
+ticksPerSecond	scan/CycleTimer.h	/^    static double ticksPerSecond() { return 1.0 \/ secondsPerTick(); }$/;"	f	class:CycleTimer
+toBW	saxpy/main.cpp	/^float toBW(int bytes, float sec) {$/;"	f
+uint	render/cudaRenderer.h	5;"	d
+updateSim	render/display.cpp	/^    bool updateSim;$/;"	m	struct:__anon2	file:
+usage	render/checker.pl	/^sub usage {$/;"	s
+usage	render/main.cpp	/^void usage(const char *progname) {$/;"	f
+usage	saxpy/main.cpp	/^void usage(const char *progname) {$/;"	f
+usage	scan/checker.pl	/^sub usage {$/;"	s
+usage	scan/main.cpp	/^void usage(const char *progname) {$/;"	f
+vec2CellNoise	render/noise.cpp	/^void vec2CellNoise(float location[3], float result[2], int index) {$/;"	f
+velocity	render/cudaRenderer.h	/^    float *velocity;$/;"	m	class:CudaRenderer
+velocity	render/refRenderer.h	/^    float *velocity;$/;"	m	class:RefRenderer
+width	render/display.cpp	/^    int width;$/;"	m	struct:__anon2	file:
+width	render/image.h	/^    int width;$/;"	m	struct:Image
+writePPMImage	render/ppm.cpp	/^void writePPMImage(const Image *image, const char *filename) {$/;"	f
+~CircleRenderer	render/circleRenderer.h	/^    virtual ~CircleRenderer(){};$/;"	f	class:CircleRenderer
+~RefRenderer	render/refRenderer.cpp	/^RefRenderer::~RefRenderer() {$/;"	f	class:RefRenderer
