@@ -26,6 +26,27 @@ static inline int nextPow2(int n) {
     return n;
 }
 
+__global__ void
+firststage_kernel(int *device_data, int length, int step, int mod) {
+    int tidx = blockDim.x * blockIdx.x + threadIdx.x;
+    if (tidx % mod == mod - 1) {
+        device_data[tidx] += device_data[tidx - step];
+    }
+    return ;
+}
+
+__global__ void
+secondstage_kernel(int *device_data, int length, int step, int mod) {
+    int tidx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (tidx % mod == mod - 1) {
+        int temp = device_data[tidx];
+        device_data[tidx] += device_data[tidx-step];
+        device_data[tidx-step] = temp;
+    }
+    return ;
+}
+
+ 
 void exclusive_scan(int *device_data, int length) {
     /* TODO
      * Fill in this function with your exclusive scan implementation.
@@ -39,6 +60,44 @@ void exclusive_scan(int *device_data, int length) {
      * both the data array is sized to accommodate the next
      * power of 2 larger than the input.
      */
+
+    // length is the actual array size, valid_size is the value from 
+    // nextPow2(length)
+    int threadsPerBlock = 2;
+    int valid_size = nextPow2(length);
+    int num_blocks = (valid_size + threadsPerBlock -1) / threadsPerBlock;
+
+    // int *last_valid_num = nullptr;
+    // if (length != valid_size) {
+    //     last_valid_num = (int *)malloc(sizeof(int));
+    //     cudaMemcpy(last_valid_num, device_data+valid_size-1, sizeof(int), cudaMemcpyDeviceToHost);
+    // }
+    int mod = 0;
+    int step = 0;
+
+    // stage1
+    mod = 2;
+    for (step = 1; step < valid_size/threadsPerBlock ; step*=2) {
+        firststage_kernel<<<num_blocks, threadsPerBlock>>>(device_data, valid_size, step, mod);
+        mod *= 2;
+    }
+
+    // stage2
+    cudaMemset(device_data + valid_size - 1, 0, sizeof(int));
+    mod = valid_size;
+    for (step = valid_size/2; step > 0; step/=2) {
+        secondstage_kernel<<<num_blocks, threadsPerBlock>>>(device_data, valid_size, step, mod);
+        mod /= 2;
+    }
+    
+    // if (length != valid_size) {
+    //     int *last_num = (int *)malloc(sizeof(int));
+    //     cudaMemcpy(last_num, device_data+valid_size-1, sizeof(int), cudaMemcpyDeviceToHost);
+    //     *last_num = *last_num + *last_valid_num;
+    //     cudaMemcpy(device_data+length-1, last_num, sizeof(int), cudaMemcpyHostToDevice);
+    // }
+
+    return ;
 }
 
 /* This function is a wrapper around the code you will write - it copies the
@@ -57,6 +116,9 @@ double cudaScan(int *inarray, int *end, int *resultarray) {
     cudaMalloc((void **)&device_data, sizeof(int) * rounded_length);
 
     cudaMemcpy(device_data, inarray, (end - inarray) * sizeof(int), cudaMemcpyHostToDevice);
+
+    // for non-power-of-2 inputs
+    cudaMemset(device_data+(end-inarray), 0, (end - inarray) * sizeof(int));
 
     double startTime = CycleTimer::currentSeconds();
 
