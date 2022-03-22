@@ -150,14 +150,14 @@ int main(int argc, char **argv) {
         }
 
         // Validate results
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < N; i++) {
             if (checkarray[i] != resultarray[i]) {
                 fprintf(stderr, "Error: Device exclusive_scan outputs incorrect result."
                                 " A[%d] = %d, expecting %d.\n",
                         i, resultarray[i], checkarray[i]);
+                exit(1);
             }
         }
-        exit(1);
         printf("Scan outputs are correct!\n");
     } else if (test.compare("find_peaks") == 0) { // Test find_peaks
 

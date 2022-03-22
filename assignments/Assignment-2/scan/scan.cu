@@ -10,8 +10,10 @@
 #include <thrust/scan.h>
 
 #include "CycleTimer.h"
+#include "exclusivescan1.cu"
 
 extern float toBW(int bytes, float sec);
+extern void exclusive_scan1(int *device_data, int length);
 
 /* Helper function to round up to a power of 2.
  */
@@ -67,11 +69,6 @@ void exclusive_scan(int *device_data, int length) {
     int valid_size = nextPow2(length);
     int num_blocks = (valid_size + threadsPerBlock -1) / threadsPerBlock;
 
-    // int *last_valid_num = nullptr;
-    // if (length != valid_size) {
-    //     last_valid_num = (int *)malloc(sizeof(int));
-    //     cudaMemcpy(last_valid_num, device_data+valid_size-1, sizeof(int), cudaMemcpyDeviceToHost);
-    // }
     int mod = 0;
     int step = 0;
 
@@ -90,13 +87,6 @@ void exclusive_scan(int *device_data, int length) {
         mod /= 2;
     }
     
-    // if (length != valid_size) {
-    //     int *last_num = (int *)malloc(sizeof(int));
-    //     cudaMemcpy(last_num, device_data+valid_size-1, sizeof(int), cudaMemcpyDeviceToHost);
-    //     *last_num = *last_num + *last_valid_num;
-    //     cudaMemcpy(device_data+length-1, last_num, sizeof(int), cudaMemcpyHostToDevice);
-    // }
-
     return ;
 }
 
@@ -122,7 +112,7 @@ double cudaScan(int *inarray, int *end, int *resultarray) {
 
     double startTime = CycleTimer::currentSeconds();
 
-    exclusive_scan(device_data, end - inarray);
+    exclusive_scan1(device_data, end - inarray);
 
     // Wait for any work left over to be completed.
     cudaDeviceSynchronize();
