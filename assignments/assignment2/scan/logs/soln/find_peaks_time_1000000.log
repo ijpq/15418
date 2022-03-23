@@ -5,5 +5,5 @@ Device 0: GeForce RTX 2080 Ti
    Global mem: 11019 MB
    CUDA Cap:   7.5
 ---------------------------------------------------------
-GPU_time: 0.336 ms
-Scan outputs are correct!
+GPU_time: 1.228 ms
+Find_peaks outputs are correct!
