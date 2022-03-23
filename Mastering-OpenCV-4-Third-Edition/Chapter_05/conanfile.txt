@@ -1,8 +1,0 @@
-[requires]
-OpenCV/master@damiles/stable
-
-[generators]
-cmake
-
-[options]
-OpenCV:opencv_face=True

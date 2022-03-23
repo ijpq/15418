@@ -1,0 +1,16 @@
+{"time": 0, "work": "cmd=compareprimes;n1=803182;n2=837769;n3=603566;n4=668229", "resp": "There are more primes in second range."}
+{"time": 500, "work": "cmd=compareprimes;n1=661974;n2=704510;n3=621325;n4=813520", "resp": "There are more primes in second range."}
+{"time": 1000, "work": "cmd=compareprimes;n1=624059;n2=791933;n3=773594;n4=859536", "resp": "There are more primes in first range."}
+{"time": 1500, "work": "cmd=compareprimes;n1=604197;n2=822011;n3=505616;n4=719480", "resp": "There are more primes in first range."}
+{"time": 2000, "work": "cmd=compareprimes;n1=659529;n2=787882;n3=767261;n4=829938", "resp": "There are more primes in first range."}
+{"time": 2500, "work": "cmd=compareprimes;n1=500457;n2=697431;n3=597564;n4=847041", "resp": "There are more primes in second range."}
+{"time": 3000, "work": "cmd=compareprimes;n1=630082;n2=848189;n3=576427;n4=727004", "resp": "There are more primes in first range."}
+{"time": 3500, "work": "cmd=compareprimes;n1=595446;n2=887017;n3=679188;n4=821272", "resp": "There are more primes in first range."}
+{"time": 4000, "work": "cmd=compareprimes;n1=532178;n2=628022;n3=703176;n4=873134", "resp": "There are more primes in second range."}
+{"time": 4500, "work": "cmd=compareprimes;n1=543623;n2=720507;n3=718976;n4=782625", "resp": "There are more primes in first range."}
+{"time": 5000, "work": "cmd=compareprimes;n1=716113;n2=825787;n3=741274;n4=885536", "resp": "There are more primes in second range."}
+{"time": 5500, "work": "cmd=compareprimes;n1=677996;n2=735047;n3=653960;n4=738515", "resp": "There are more primes in second range."}
+{"time": 6000, "work": "cmd=compareprimes;n1=616132;n2=730260;n3=574691;n4=575756", "resp": "There are more primes in first range."}
+{"time": 6500, "work": "cmd=compareprimes;n1=745109;n2=762664;n3=535929;n4=690612", "resp": "There are more primes in second range."}
+{"time": 7000, "work": "cmd=compareprimes;n1=803042;n2=850709;n3=836984;n4=869353", "resp": "There are more primes in first range."}
+{"time": 7500, "work": "cmd=lastrequest", "resp": "ack" }
