@@ -150,6 +150,27 @@ double cudaScanThrust(int *inarray, int *end, int *resultarray) {
     return overallDuration;
 }
 
+__global__
+void mark_peaks(int *device_input, int length, int *device_output) {
+    int i = threadIdx.x + blockIdx.x * blockDim.x;
+    if (i && i < length-1) {
+        if (device_input[i] > device_input[i-1] && device_input[i] > device_input[i+1]) {
+            device_output[i] = 1;
+        } else {
+            device_output[i] = 0;
+        }
+    }
+    return ;
+}
+
+__global__
+void write_output(int *device_input, int *device_output, int length) {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+    if (i < length - 1 && device_input[i] != device_input[i+1])
+        device_output[device_input[i]] = i;
+    return ;
+}
+
 int find_peaks(int *device_input, int length, int *device_output) {
     /* TODO:
      * Finds all elements in the list that are greater than the elements before and after,
@@ -165,7 +186,20 @@ int find_peaks(int *device_input, int length, int *device_output) {
      * it requires that. However, you must ensure that the results of
      * find_peaks are correct given the original length.
      */
-    return 0;
+    int rounded_length = nextPow2(length);
+    int num_blocks = (length + THREADSPERBLOCK - 1) / THREADSPERBLOCK;
+    // write marked index to device_output
+    mark_peaks<<<num_blocks, THREADSPERBLOCK>>>(device_input, length, device_output);
+    // write marked index to device_input
+    cudaMemcpy(device_input, device_output, sizeof(int) * length, cudaMemcpyDeviceToDevice);
+    // exclusive scan on device_input to get num_peaks
+    exclusive_scan1(device_input, length);
+    int results = 0;
+    int *num_peaks = &results;
+    cudaMemcpy(num_peaks, device_input+length-1, 1*sizeof(int), cudaMemcpyDeviceToHost);
+    write_output<<<num_blocks, THREADSPERBLOCK>>>(device_input, device_output, length);
+    
+    return *num_peaks;
 }
 
 /* Timing wrapper around find_peaks. You should not modify this function.
@@ -176,6 +210,7 @@ double cudaFindPeaks(int *input, int length, int *output, int *output_length) {
     int rounded_length = nextPow2(length);
     cudaMalloc((void **)&device_input, rounded_length * sizeof(int));
     cudaMalloc((void **)&device_output, rounded_length * sizeof(int));
+    cudaMemset(device_input, 0, sizeof(int) *rounded_length);
     cudaMemcpy(device_input, input, length * sizeof(int), cudaMemcpyHostToDevice);
 
     double startTime = CycleTimer::currentSeconds();
