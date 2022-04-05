@@ -45,6 +45,8 @@ class CudaRenderer : public CircleRenderer {
 
     void shadePixel(float pixelCenterX, float pixelCenterY, float px, float py, float pz,
                     float *pixelData, int circleIndex);
+
+    void doRenderCircles();
 };
 
 #endif

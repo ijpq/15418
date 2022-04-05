@@ -15,6 +15,9 @@
 #include "sceneLoader.h"
 #include "util.h"
 
+#include <vector>
+#include <iostream>
+
 ////////////////////////////////////////////////////////////////////////////////////////
 // All cuda kernels here
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -616,11 +619,90 @@ void CudaRenderer::advanceAnimation() {
     cudaDeviceSynchronize();
 }
 
+__global__
+void kernelRenderLayer(int starterCirclesIndex, int numCirclesToRender) {
+    int threadIndex = blockIdx.x * blockDim.x + threadIdx.x;
+    if (threadIndex >= numCirclesToRender)
+        return;
+
+    int index = starterCirclesIndex + threadIndex;
+    int index3 = 3 * index;
+
+    // Read position and radius
+    float3 p = *(float3 *)(&cuConstRendererParams.position[index3]);
+    float rad = cuConstRendererParams.radius[index];
+
+    // Compute the bounding box of the circle. The bound is in integer
+    // screen coordinates, so it's clamped to the edges of the screen.
+    short imageWidth = cuConstRendererParams.imageWidth;
+    short imageHeight = cuConstRendererParams.imageHeight;
+    short minX = static_cast<short>(imageWidth * (p.x - rad));
+    short maxX = static_cast<short>(imageWidth * (p.x + rad)) + 1;
+    short minY = static_cast<short>(imageHeight * (p.y - rad));
+    short maxY = static_cast<short>(imageHeight * (p.y + rad)) + 1;
+
+    // A bunch of clamps.  Is there a CUDA built-in for this?
+    short screenMinX = (minX > 0) ? ((minX < imageWidth) ? minX : imageWidth) : 0;
+    short screenMaxX = (maxX > 0) ? ((maxX < imageWidth) ? maxX : imageWidth) : 0;
+    short screenMinY = (minY > 0) ? ((minY < imageHeight) ? minY : imageHeight) : 0;
+    short screenMaxY = (maxY > 0) ? ((maxY < imageHeight) ? maxY : imageHeight) : 0;
+
+    float invWidth = 1.f / imageWidth;
+    float invHeight = 1.f / imageHeight;
+
+    // For all pixels in the bounding box
+    for (int pixelY = screenMinY; pixelY < screenMaxY; pixelY++) {
+        float4 *imgPtr = (float4 *)(&cuConstRendererParams.imageData[4 * (pixelY * imageWidth + screenMinX)]);
+        for (int pixelX = screenMinX; pixelX < screenMaxX; pixelX++) {
+            float2 pixelCenterNorm = make_float2(invWidth * (static_cast<float>(pixelX) + 0.5f),
+                                                 invHeight * (static_cast<float>(pixelY) + 0.5f));
+            shadePixel(pixelCenterNorm, p, imgPtr, index);
+            imgPtr++;
+        }
+    }   
+    
+
+}
+
+void CudaRenderer::doRenderCircles() {
+    std::vector<std::pair<int, float>> depthList;
+    std::vector<int> groupedNonoverlapedCircles = {0};
+    float prevDepth = position[2];
+    for (int circleIndex = 1; circleIndex < numberOfCircles; circleIndex++) {
+        if (prevDepth && position[3*circleIndex+2] != prevDepth) {
+            groupedNonoverlapedCircles.push_back(circleIndex); 
+            prevDepth = position[3*circleIndex+2];
+        }
+    }
+
+    for (int markedIndex = 0; markedIndex < groupedNonoverlapedCircles.size(); markedIndex++) {
+        int nextindex = markedIndex+1; 
+        int numCirclesToRender = 0;
+        if (markedIndex == groupedNonoverlapedCircles.size()-1) {
+            nextindex = numberOfCircles;
+            numCirclesToRender = nextindex - groupedNonoverlapedCircles[markedIndex];
+        } else {
+            numCirclesToRender = groupedNonoverlapedCircles[nextindex] - groupedNonoverlapedCircles[markedIndex];
+        }
+        dim3 blockDim(1024, 1);
+        dim3 gridDim((numCirclesToRender + blockDim.x - 1) / blockDim.x);
+        kernelRenderLayer<<<gridDim, blockDim>>>(groupedNonoverlapedCircles[markedIndex], numCirclesToRender);
+        cudaDeviceSynchronize();
+    }
+    // for (int circleIndex = 0; circleIndex < numberOfCircles; circleIndex++) {
+    //     for (testCircleIndex = ; testCircleIndex < circleIndex; testCircleIndex++) {
+
+    //     }
+    // }
+    return ;
+}
+
 void CudaRenderer::render() {
     // 256 threads per block is a healthy number
     dim3 blockDim(256, 1);
     dim3 gridDim((numberOfCircles + blockDim.x - 1) / blockDim.x);
 
-    kernelRenderCircles<<<gridDim, blockDim>>>();
+    // kernelRenderCircles<<<gridDim, blockDim>>>();
+    doRenderCircles();
     cudaDeviceSynchronize();
 }
