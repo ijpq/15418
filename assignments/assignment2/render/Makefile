@@ -49,7 +49,7 @@ export: $(EXFILES)
 
 
 $(EXECUTABLE): dirs $(OBJS)
-		$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LDFLAGS) $(LDLIBS) $(LDFRAMEWORKS)
+		$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LDFLAGS) $(LDLIBS) $(LDFRAMEWORKS) ./objs/link.o -lcudadevrt
 
 
 
@@ -58,4 +58,5 @@ $(OBJDIR)/%.o: %.cpp
 		$(CXX) $< $(CXXFLAGS) -c -o $@
 
 $(OBJDIR)/%.o: %.cu
-		$(NVCC) $< $(NVCCFLAGS) -c -o $@
+		$(NVCC) $< $(NVCCFLAGS) -c -o $@ --device-c
+		$(NVCC) $(NVCCFLAGS) --device-link $@ --output-file ./objs/link.o

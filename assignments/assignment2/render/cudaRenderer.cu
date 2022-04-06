@@ -620,6 +620,25 @@ void CudaRenderer::advanceAnimation() {
 }
 
 __global__
+void kernelShadePixel(int screenMinX, int screenMinY, int screenMaxX, int screenMaxY, int imageWidth, int imageHeight, float3 p, int circleIndex) {
+    int pixelIndexX = blockDim.x * blockIdx.x + threadIdx.x;
+    int pixelX = pixelIndexX + screenMinX;
+    int pixelIndexY = blockDim.y * blockIdx.y + threadIdx.y;
+    int pixelY = pixelIndexY + screenMinY;
+    if (pixelX >= screenMaxX || pixelY >= screenMaxY) return;
+
+    float invWidth = 1.f / imageWidth;
+    float invHeight = 1.f / imageHeight;
+    
+    float4 *imgPtr = (float4 *)(&cuConstRendererParams.imageData[4 * (pixelY * imageWidth + pixelX)]);
+    float2 pixelCenterNorm = \
+        make_float2(invWidth * (static_cast<float>(pixelX) + .5f), \
+            invHeight * (static_cast<float>(pixelY) + .5f));
+    shadePixel(pixelCenterNorm, p, imgPtr, circleIndex);
+    return ;
+}
+
+__global__
 void kernelRenderLayer(int starterCirclesIndex, int numCirclesToRender) {
     int threadIndex = blockIdx.x * blockDim.x + threadIdx.x;
     if (threadIndex >= numCirclesToRender)
@@ -651,16 +670,22 @@ void kernelRenderLayer(int starterCirclesIndex, int numCirclesToRender) {
     float invHeight = 1.f / imageHeight;
 
     // For all pixels in the bounding box
-    for (int pixelY = screenMinY; pixelY < screenMaxY; pixelY++) {
-        float4 *imgPtr = (float4 *)(&cuConstRendererParams.imageData[4 * (pixelY * imageWidth + screenMinX)]);
-        for (int pixelX = screenMinX; pixelX < screenMaxX; pixelX++) {
-            float2 pixelCenterNorm = make_float2(invWidth * (static_cast<float>(pixelX) + 0.5f),
-                                                 invHeight * (static_cast<float>(pixelY) + 0.5f));
-            shadePixel(pixelCenterNorm, p, imgPtr, index);
-            imgPtr++;
-        }
-    }   
     
+    // for (int pixelY = screenMinY; pixelY < screenMaxY; pixelY++) {
+    //     float4 *imgPtr = (float4 *)(&cuConstRendererParams.imageData[4 * (pixelY * imageWidth + screenMinX)]);
+    //     for (int pixelX = screenMinX; pixelX < screenMaxX; pixelX++) {
+    //         float2 pixelCenterNorm = make_float2(invWidth * (static_cast<float>(pixelX) + 0.5f),
+    //                                              invHeight * (static_cast<float>(pixelY) + 0.5f));
+    //         shadePixel(pixelCenterNorm, p, imgPtr, index);
+    //         imgPtr++;
+    //     }
+    // }   
+    int numPixelToReningWidth = screenMaxX - screenMinX;
+    int numPixelToReningHeight = screenMaxY - screenMinY;
+    dim3 blockDim(16, 16);
+    dim3 gridDim((numPixelToReningWidth + blockDim.x - 1) / blockDim.x, (numPixelToReningHeight + blockDim.y - 1) / blockDim.y);
+    kernelShadePixel<<<gridDim, blockDim>>>(screenMinX, screenMinY, screenMaxX, screenMaxY, imageWidth, imageHeight, p, index);
+    return ;
 
 }
 
