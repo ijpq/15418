@@ -47,6 +47,10 @@ class CudaRenderer : public CircleRenderer {
                     float *pixelData, int circleIndex);
 
     void doRenderCircles();
+
+    int isOverlapped(const float *const, const float *const, const float, const float);
+
+    int testPassedLastCircle(int, int);
 };
 
 #endif

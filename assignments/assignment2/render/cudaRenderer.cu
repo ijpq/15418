@@ -664,14 +664,55 @@ void kernelRenderLayer(int starterCirclesIndex, int numCirclesToRender) {
 
 }
 
+int CudaRenderer::isOverlapped(const float *const p1, const float *const p2, const float r1, const float r2) {
+    float diffX = p1[0] - p2[0];
+    float diffY = p1[1] - p2[1];
+    float pixelDist = diffX * diffX + diffY * diffY;
+    float maxDist = (r1+r2)*(r1+r2);
+    if (pixelDist <= maxDist) {
+        return 1;
+    }
+    return 0;
+}
+
+int CudaRenderer::testPassedLastCircle(int circleIndexLhs, int circleIndexRhs) {
+
+    float *lastCirclePosition = (float *)(position + 3 * circleIndexRhs);
+    float lastCircleRad = radius[circleIndexRhs];
+    for (int i = circleIndexRhs-1; i >= circleIndexLhs; i--) {
+        float *currentCirclePosition = (float *)(position + 3 * i);
+        float currentCircleRad = radius[i];
+        if (isOverlapped(lastCirclePosition, currentCirclePosition, lastCircleRad, currentCircleRad)) {
+            return 0;
+        }
+    }
+    return 1;
+
+}
+
 void CudaRenderer::doRenderCircles() {
-    std::vector<std::pair<int, float>> depthList;
-    std::vector<int> groupedNonoverlapedCircles = {0};
-    float prevDepth = position[2];
-    for (int circleIndex = 1; circleIndex < numberOfCircles; circleIndex++) {
-        if (prevDepth && position[3*circleIndex+2] != prevDepth) {
-            groupedNonoverlapedCircles.push_back(circleIndex); 
-            prevDepth = position[3*circleIndex+2];
+    int i = 0, j = 0;
+    std::vector<int> groupedNonoverlapedCircles = {i};
+    while (i < numberOfCircles) {
+        for (j = i+1; j < numberOfCircles; j++) {
+            if (testPassedLastCircle(i, j)) {
+                if (j < numberOfCircles-1)
+                    continue;
+                else if (j == numberOfCircles-1) {
+                    i = numberOfCircles;
+                    break;
+                }
+            } else {
+                if (j == numberOfCircles-1) {
+                    groupedNonoverlapedCircles.push_back(j);
+                    i = numberOfCircles;
+                    break;
+                } else {
+                    i = j;
+                    groupedNonoverlapedCircles.push_back(i);
+                    break;
+                }
+            }
         }
     }
 
@@ -689,11 +730,6 @@ void CudaRenderer::doRenderCircles() {
         kernelRenderLayer<<<gridDim, blockDim>>>(groupedNonoverlapedCircles[markedIndex], numCirclesToRender);
         cudaDeviceSynchronize();
     }
-    // for (int circleIndex = 0; circleIndex < numberOfCircles; circleIndex++) {
-    //     for (testCircleIndex = ; testCircleIndex < circleIndex; testCircleIndex++) {
-
-    //     }
-    // }
     return ;
 }
 
