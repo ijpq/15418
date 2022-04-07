@@ -56,7 +56,7 @@ print ("--------------\n");
 
 my $render_soln = "render_soln";
 if (index(lc($hostname),"ghc") == -1) {
-    $render_soln = "render_soln_latedays";
+    $render_soln = "render_soln";
 }
 
 foreach my $scene (@scene_names) {

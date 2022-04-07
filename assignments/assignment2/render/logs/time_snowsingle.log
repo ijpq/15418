@@ -1,0 +1,21 @@
+Rendering to 1150x1150 image
+Loaded data for 100000 circles from snow.par
+Loaded scene with 100000 circles
+---------------------------------------------------------
+Initializing CUDA for CudaRenderer
+Found 1 CUDA devices
+Device 0: GeForce RTX 2080 Ti
+   SMs:        68
+   Global mem: 11019 MB
+   CUDA Cap:   7.5
+---------------------------------------------------------
+WARNING: You're not running on a fast GPU, please consider using NVIDIA RTX 2080.
+---------------------------------------------------------
+
+Running benchmark, 4 frames, beginning at frame 0 ...
+Clear:    0.0460 ms
+Advance:  0.0006 ms
+Render:   3.5730 ms
+Total:    3.6196 ms
+
+Overall:  0.0174 sec (note units are seconds)
