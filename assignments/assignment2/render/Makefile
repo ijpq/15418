@@ -1,9 +1,9 @@
 EXECUTABLE := render
 LDFLAGS=-L/data/cuda/cuda-10.2/cuda/lib64/ -lcudart
-CU_FILES   := cudaRenderer.cu
+CU_FILES   := cudaRenderer.cu renderAlongWithPixel.cu
 CU_DEPS    :=
 CC_FILES   := main.cpp display.cpp benchmark.cpp refRenderer.cpp \
-              noise.cpp ppm.cpp sceneLoader.cpp
+              noise.cpp ppm.cpp sceneLoader.cpp 
 LOGS	   := logs
 
 all: $(EXECUTABLE)
@@ -28,8 +28,10 @@ LDFRAMEWORKS := $(addprefix -framework , $(FRAMEWORKS))
 NVCC=nvcc
 
 OBJS=$(OBJDIR)/main.o $(OBJDIR)/display.o $(OBJDIR)/benchmark.o $(OBJDIR)/refRenderer.o \
-     $(OBJDIR)/cudaRenderer.o $(OBJDIR)/noise.o $(OBJDIR)/ppm.o $(OBJDIR)/sceneLoader.o
+	 $(OBJDIR)/renderAlongWithPixel.o \
+     $(OBJDIR)/cudaRenderer.o $(OBJDIR)/noise.o $(OBJDIR)/ppm.o $(OBJDIR)/sceneLoader.o \
 
+CUOBJS=$(OBJDIR)/renderAlongWithPixel.o $(OBJDIR)/cudaRenderer.o
 
 .PHONY: dirs clean
 
@@ -47,9 +49,11 @@ check:	default
 export: $(EXFILES)
 	cp -p $(EXFILES) $(STARTER)
 
+link.o:
+	$(NVCC) $(NVCCFLAGS) $(CUOBJS) -dlink -o $(OBJDIR)/link.o
 
-$(EXECUTABLE): dirs $(OBJS)
-		$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LDFLAGS) $(LDLIBS) $(LDFRAMEWORKS) ./objs/link.o -lcudadevrt
+$(EXECUTABLE): dirs $(OBJS) link.o
+		$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(OBJDIR)/link.o $(LDFLAGS) $(LDLIBS) $(LDFRAMEWORKS) -lcudadevrt
 
 
 
@@ -58,5 +62,4 @@ $(OBJDIR)/%.o: %.cpp
 		$(CXX) $< $(CXXFLAGS) -c -o $@
 
 $(OBJDIR)/%.o: %.cu
-		$(NVCC) $< $(NVCCFLAGS) -c -o $@ --device-c
-		$(NVCC) $(NVCCFLAGS) --device-link $@ --output-file ./objs/link.o
+		$(NVCC) $< $(NVCCFLAGS) -dc -o $@ 

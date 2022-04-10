@@ -15,9 +15,9 @@ WARNING: You're not running on a fast GPU, please consider using NVIDIA RTX 2080
 Running benchmark, 1 frames, beginning at frame 0 ...
 Copying image data from device
 ***************** Correctness check passed **************************
-Clear:    0.0597 ms
-Advance:  0.0093 ms
-Render:   0.2163 ms
-Total:    0.2853 ms
+Clear:    0.0606 ms
+Advance:  0.0099 ms
+Render:   0.0622 ms
+Total:    0.1327 ms
 
-Overall:  0.0354 sec (note units are seconds)
+Overall:  0.0389 sec (note units are seconds)

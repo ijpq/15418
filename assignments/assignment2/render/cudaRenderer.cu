@@ -14,9 +14,11 @@
 #include "noise.h"
 #include "sceneLoader.h"
 #include "util.h"
+#include "renderAlongWithPixel.h"
 
 #include <vector>
 #include <iostream>
+#include <ctime>
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // All cuda kernels here
@@ -60,6 +62,10 @@ __constant__ float cuConstColorRamp[COLOR_MAP_SIZE][3];
 // file simpler and to seperate code that should not be modified
 #include "lookupColor.cu_inl"
 #include "noiseCuda.cu_inl"
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+
 
 // kernelClearImageSnowflake -- (CUDA device code)
 //
@@ -666,20 +672,6 @@ void kernelRenderLayer(int starterCirclesIndex, int numCirclesToRender) {
     short screenMinY = (minY > 0) ? ((minY < imageHeight) ? minY : imageHeight) : 0;
     short screenMaxY = (maxY > 0) ? ((maxY < imageHeight) ? maxY : imageHeight) : 0;
 
-    float invWidth = 1.f / imageWidth;
-    float invHeight = 1.f / imageHeight;
-
-    // For all pixels in the bounding box
-    
-    // for (int pixelY = screenMinY; pixelY < screenMaxY; pixelY++) {
-    //     float4 *imgPtr = (float4 *)(&cuConstRendererParams.imageData[4 * (pixelY * imageWidth + screenMinX)]);
-    //     for (int pixelX = screenMinX; pixelX < screenMaxX; pixelX++) {
-    //         float2 pixelCenterNorm = make_float2(invWidth * (static_cast<float>(pixelX) + 0.5f),
-    //                                              invHeight * (static_cast<float>(pixelY) + 0.5f));
-    //         shadePixel(pixelCenterNorm, p, imgPtr, index);
-    //         imgPtr++;
-    //     }
-    // }   
     int numPixelToReningWidth = screenMaxX - screenMinX;
     int numPixelToReningHeight = screenMaxY - screenMinY;
     dim3 blockDim(16, 16);
@@ -689,16 +681,14 @@ void kernelRenderLayer(int starterCirclesIndex, int numCirclesToRender) {
 
 }
 
-int CudaRenderer::isOverlapped(const float *const p1, const float *const p2, const float r1, const float r2) {
+int CudaRenderer::isCircleOverlapped(const float *const p1, const float *const p2, const float r1, const float r2) {
     float diffX = p1[0] - p2[0];
     float diffY = p1[1] - p2[1];
     float pixelDist = diffX * diffX + diffY * diffY;
     float maxDist = (r1+r2)*(r1+r2);
-    if (pixelDist <= maxDist) {
-        return 1;
-    }
-    return 0;
+    return pixelDist <= maxDist ? 1 : 0;
 }
+
 
 int CudaRenderer::testPassedLastCircle(int circleIndexLhs, int circleIndexRhs) {
 
@@ -707,7 +697,7 @@ int CudaRenderer::testPassedLastCircle(int circleIndexLhs, int circleIndexRhs) {
     for (int i = circleIndexRhs-1; i >= circleIndexLhs; i--) {
         float *currentCirclePosition = (float *)(position + 3 * i);
         float currentCircleRad = radius[i];
-        if (isOverlapped(lastCirclePosition, currentCirclePosition, lastCircleRad, currentCircleRad)) {
+        if (isCircleOverlapped(lastCirclePosition, currentCirclePosition, lastCircleRad, currentCircleRad)) {
             return 0;
         }
     }
@@ -758,12 +748,110 @@ void CudaRenderer::doRenderCircles() {
     return ;
 }
 
+__device__ __inline__ int isWithinCircle(const float2 &pixelCenterNorm, const float3 &circlePos) {
+    float diffX = pixelCenterNorm.x - circlePos.x;
+    float diffY = pixelCenterNorm.y - circlePos.y;
+    float pixelDist = diffX * diffX + diffY * diffY;
+    float maxDist = circlePos.z * circlePos.z;
+    return pixelDist <= maxDist ? 1 : 0;
+}
+
+__device__ void myShadePixel(const int &circleIndex, const float2 &pixelCenterNorm, float4 *imagePtr) {
+    float3 rgb;
+    float alpha; 
+    int index3 = circleIndex * 3;
+
+    // TODO: template
+    if (cuConstRendererParams.sceneName == SNOWFLAKES || \
+        cuConstRendererParams.sceneName == SNOWFLAKES_SINGLE_FRAME) {
+
+        const float kCircleMaxAlpha = .5f;
+        const float falloffScale = 4.f;
+        float rad = cuConstRendererParams.radius[circleIndex];
+        float diffX = pixelCenterNorm.x - cuConstRendererParams.position[index3];
+        float diffY = pixelCenterNorm.y - cuConstRendererParams.position[index3 + 1];
+        float pixelDist = diffX * diffX + diffY + diffY;
+        
+        float normPixelDist = sqrt(pixelDist) / rad;
+        rgb = lookupColor(normPixelDist);
+
+        float maxAlpha = .6f + .4f * (1.f - cuConstRendererParams.position[index3 + 2]);
+        maxAlpha = kCircleMaxAlpha * fmaxf(fminf(maxAlpha, 1.f), 0.f);
+        alpha = maxAlpha * exp(-1.f * falloffScale * normPixelDist * normPixelDist);
+
+    } else {
+
+        rgb = *(float3 *)&(cuConstRendererParams.color[index3]);
+        alpha = .5f;
+
+    }
+    
+    float oneMinusAlpha = 1.f - alpha;
+
+    // FIXME: atomic if this device code rendering more than one pixel.
+
+    float4 existingColor = *imagePtr;
+    float4 newColor;
+    newColor.x = alpha * rgb.x + oneMinusAlpha * existingColor.x;
+    newColor.y = alpha * rgb.y + oneMinusAlpha * existingColor.y;
+    newColor.z = alpha * rgb.z + oneMinusAlpha * existingColor.z;
+    newColor.w = alpha + existingColor.w;
+
+    *imagePtr = newColor;
+
+
+    return ;
+}
+
+__global__ void kernelRenderPixels() {
+    int indexX = threadIdx.x + blockDim.x * blockIdx.x;
+    int indexY = threadIdx.y + blockDim.y * blockIdx.y;
+    int imageWidth = cuConstRendererParams.imageWidth;
+    int imageHeight = cuConstRendererParams.imageHeight;
+    if (indexX >= imageWidth || indexY >= imageHeight) {
+        return ;
+    }
+    float invWidth = 1.f / imageWidth;
+    float invHeight = 1.f / imageHeight;
+
+    float2 pixelCenterNorm = \
+        make_float2( \
+            invWidth * (static_cast<float>(indexX) + .5f), \
+            invHeight * (static_cast<float>(indexY) + .5f) \
+            );
+    for (int circleIndex = 0; circleIndex < cuConstRendererParams.numberOfCircles; circleIndex++) {
+        // circlePos saving 2D position and radius.
+        float3 circlePos = make_float3( \
+            cuConstRendererParams.position[3 * circleIndex + 0], \
+            cuConstRendererParams.position[3 * circleIndex + 1], \
+            cuConstRendererParams.radius[circleIndex] \
+            );
+        if (isWithinCircle(pixelCenterNorm, circlePos)) {
+            float4 *imagePtr = (float4 *)(&cuConstRendererParams.imageData[4 * (indexY * imageWidth + indexX)]);
+            myShadePixel(circleIndex, pixelCenterNorm, imagePtr);
+        }
+    }
+
+    return ;
+}
+
+void CudaRenderer::doRenderPixels() {
+    int imageWidth = image->width;
+    int imageHeight = image->height;
+    dim3 blockDim(32, 32);
+    dim3 gridDim((imageWidth + blockDim.x -1) / blockDim.x, (imageHeight + blockDim.y - 1) / blockDim.y);
+    kernelRenderPixels<<<gridDim, blockDim>>>();
+    cudaDeviceSynchronize();
+}
+
 void CudaRenderer::render() {
     // 256 threads per block is a healthy number
     dim3 blockDim(256, 1);
     dim3 gridDim((numberOfCircles + blockDim.x - 1) / blockDim.x);
 
-    // kernelRenderCircles<<<gridDim, blockDim>>>();
-    doRenderCircles();
+    // doRenderCircles();
+    
+    doRenderPixels();
+
     cudaDeviceSynchronize();
 }
