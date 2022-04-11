@@ -1,5 +1,3 @@
-# 15418
-
 # ENV
 
 型号：Intel(R) Core(TM) i5-8400 CPU @ 2.80GHz
