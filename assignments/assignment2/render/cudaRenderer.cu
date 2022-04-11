@@ -625,128 +625,12 @@ void CudaRenderer::advanceAnimation() {
     cudaDeviceSynchronize();
 }
 
-__global__
-void kernelShadePixel(int screenMinX, int screenMinY, int screenMaxX, int screenMaxY, int imageWidth, int imageHeight, float3 p, int circleIndex) {
-    int pixelIndexX = blockDim.x * blockIdx.x + threadIdx.x;
-    int pixelX = pixelIndexX + screenMinX;
-    int pixelIndexY = blockDim.y * blockIdx.y + threadIdx.y;
-    int pixelY = pixelIndexY + screenMinY;
-    if (pixelX >= screenMaxX || pixelY >= screenMaxY) return;
-
-    float invWidth = 1.f / imageWidth;
-    float invHeight = 1.f / imageHeight;
-    
-    float4 *imgPtr = (float4 *)(&cuConstRendererParams.imageData[4 * (pixelY * imageWidth + pixelX)]);
-    float2 pixelCenterNorm = \
-        make_float2(invWidth * (static_cast<float>(pixelX) + .5f), \
-            invHeight * (static_cast<float>(pixelY) + .5f));
-    shadePixel(pixelCenterNorm, p, imgPtr, circleIndex);
-    return ;
-}
-
-__global__
-void kernelRenderLayer(int starterCirclesIndex, int numCirclesToRender) {
-    int threadIndex = blockIdx.x * blockDim.x + threadIdx.x;
-    if (threadIndex >= numCirclesToRender)
-        return;
-
-    int index = starterCirclesIndex + threadIndex;
-    int index3 = 3 * index;
-
-    // Read position and radius
-    float3 p = *(float3 *)(&cuConstRendererParams.position[index3]);
-    float rad = cuConstRendererParams.radius[index];
-
-    // Compute the bounding box of the circle. The bound is in integer
-    // screen coordinates, so it's clamped to the edges of the screen.
-    short imageWidth = cuConstRendererParams.imageWidth;
-    short imageHeight = cuConstRendererParams.imageHeight;
-    short minX = static_cast<short>(imageWidth * (p.x - rad));
-    short maxX = static_cast<short>(imageWidth * (p.x + rad)) + 1;
-    short minY = static_cast<short>(imageHeight * (p.y - rad));
-    short maxY = static_cast<short>(imageHeight * (p.y + rad)) + 1;
-
-    // A bunch of clamps.  Is there a CUDA built-in for this?
-    short screenMinX = (minX > 0) ? ((minX < imageWidth) ? minX : imageWidth) : 0;
-    short screenMaxX = (maxX > 0) ? ((maxX < imageWidth) ? maxX : imageWidth) : 0;
-    short screenMinY = (minY > 0) ? ((minY < imageHeight) ? minY : imageHeight) : 0;
-    short screenMaxY = (maxY > 0) ? ((maxY < imageHeight) ? maxY : imageHeight) : 0;
-
-    int numPixelToReningWidth = screenMaxX - screenMinX;
-    int numPixelToReningHeight = screenMaxY - screenMinY;
-    dim3 blockDim(16, 16);
-    dim3 gridDim((numPixelToReningWidth + blockDim.x - 1) / blockDim.x, (numPixelToReningHeight + blockDim.y - 1) / blockDim.y);
-    kernelShadePixel<<<gridDim, blockDim>>>(screenMinX, screenMinY, screenMaxX, screenMaxY, imageWidth, imageHeight, p, index);
-    return ;
-
-}
-
-int CudaRenderer::isCircleOverlapped(const float *const p1, const float *const p2, const float r1, const float r2) {
-    float diffX = p1[0] - p2[0];
-    float diffY = p1[1] - p2[1];
-    float pixelDist = diffX * diffX + diffY * diffY;
-    float maxDist = (r1+r2)*(r1+r2);
-    return pixelDist <= maxDist ? 1 : 0;
-}
 
 
-int CudaRenderer::testPassedLastCircle(int circleIndexLhs, int circleIndexRhs) {
 
-    float *lastCirclePosition = (float *)(position + 3 * circleIndexRhs);
-    float lastCircleRad = radius[circleIndexRhs];
-    for (int i = circleIndexRhs-1; i >= circleIndexLhs; i--) {
-        float *currentCirclePosition = (float *)(position + 3 * i);
-        float currentCircleRad = radius[i];
-        if (isCircleOverlapped(lastCirclePosition, currentCirclePosition, lastCircleRad, currentCircleRad)) {
-            return 0;
-        }
-    }
-    return 1;
 
-}
 
-void CudaRenderer::doRenderCircles() {
-    int i = 0, j = 0;
-    std::vector<int> groupedNonoverlapedCircles = {i};
-    while (i < numberOfCircles) {
-        for (j = i+1; j < numberOfCircles; j++) {
-            if (testPassedLastCircle(i, j)) {
-                if (j < numberOfCircles-1)
-                    continue;
-                else if (j == numberOfCircles-1) {
-                    i = numberOfCircles;
-                    break;
-                }
-            } else {
-                if (j == numberOfCircles-1) {
-                    groupedNonoverlapedCircles.push_back(j);
-                    i = numberOfCircles;
-                    break;
-                } else {
-                    i = j;
-                    groupedNonoverlapedCircles.push_back(i);
-                    break;
-                }
-            }
-        }
-    }
 
-    for (int markedIndex = 0; markedIndex < groupedNonoverlapedCircles.size(); markedIndex++) {
-        int nextindex = markedIndex+1; 
-        int numCirclesToRender = 0;
-        if (markedIndex == groupedNonoverlapedCircles.size()-1) {
-            nextindex = numberOfCircles;
-            numCirclesToRender = nextindex - groupedNonoverlapedCircles[markedIndex];
-        } else {
-            numCirclesToRender = groupedNonoverlapedCircles[nextindex] - groupedNonoverlapedCircles[markedIndex];
-        }
-        dim3 blockDim(1024, 1);
-        dim3 gridDim((numCirclesToRender + blockDim.x - 1) / blockDim.x);
-        kernelRenderLayer<<<gridDim, blockDim>>>(groupedNonoverlapedCircles[markedIndex], numCirclesToRender);
-        cudaDeviceSynchronize();
-    }
-    return ;
-}
 
 __device__ __inline__ int isWithinCircle(const float2 &pixelCenterNorm, const float3 &circlePos) {
     float diffX = pixelCenterNorm.x - circlePos.x;
@@ -770,7 +654,7 @@ __device__ void myShadePixel(const int &circleIndex, const float2 &pixelCenterNo
         float rad = cuConstRendererParams.radius[circleIndex];
         float diffX = pixelCenterNorm.x - cuConstRendererParams.position[index3];
         float diffY = pixelCenterNorm.y - cuConstRendererParams.position[index3 + 1];
-        float pixelDist = diffX * diffX + diffY + diffY;
+        float pixelDist = diffX * diffX + diffY * diffY;
         
         float normPixelDist = sqrt(pixelDist) / rad;
         rgb = lookupColor(normPixelDist);
