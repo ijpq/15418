@@ -686,6 +686,55 @@ __device__ void myShadePixel(const int &circleIndex, const float2 &pixelCenterNo
 
     return ;
 }
+__device__
+void updateRGBA(const SceneName &sceneName, const int &circleIndex, const int &indexX, const int &indexY, float4 &imageRGBA, float4 &newRGBA) {
+    float2 circleXY = make_float2(cuConstRendererParams.position[3*circleIndex], cuConstRendererParams.position[3*circleIndex+1]);
+    float2 pixelCenterXY = make_float2(1.f / cuConstRendererParams.imageWidth * (static_cast<float>(indexX) + .5f), 1.f / cuConstRendererParams.imageHeight * (static_cast<float>(indexY) + .5f));
+    float diffX = circleXY.x - pixelCenterXY.x;
+    float diffY = circleXY.y - pixelCenterXY.y;
+    float pixelDist = diffX * diffX + diffY * diffY;
+    float rad = cuConstRendererParams.radius[circleIndex];
+    if (pixelDist > rad*rad) {
+        newRGBA = imageRGBA;
+        return;
+    }
+
+    int index3 = 3 * circleIndex;
+    float4 rgba;
+    if (sceneName == SNOWFLAKES_SINGLE_FRAME || SNOWFLAKES) {
+        const float kCircleMaxAlpha = .5f;
+        const float falloffScale = 4.f;
+        float normPixelDist = sqrt(pixelDist) / rad;
+        float3 rgb = lookupColor(normPixelDist);
+        rgba.x = rgb.x;
+        rgba.y = rgb.y;
+        rgba.z = rgb.z;
+
+        float maxAlpha = .6f + .4f * (1.f - cuConstRendererParams.position[index3 + 2]);
+        maxAlpha = kCircleMaxAlpha * fmaxf(fminf(maxAlpha, 1.f), 0.f);
+        rgba.w = maxAlpha * exp(-1.f * falloffScale * normPixelDist * normPixelDist);
+
+    } else {
+        rgba.x = cuConstRendererParams.color[index3];
+        rgba.y = cuConstRendererParams.color[index3+1];
+        rgba.z = cuConstRendererParams.color[index3+2];
+        rgba.w = .5f;
+        
+    }
+
+    float oneMinusAlpha = 1.f - rgba.w;
+    newRGBA.x = rgba.w * rgba.x + oneMinusAlpha * imageRGBA.x;
+    newRGBA.y = rgba.w * rgba.y + oneMinusAlpha * imageRGBA.y;
+    newRGBA.z = rgba.w * rgba.z + oneMinusAlpha * imageRGBA.z;
+    newRGBA.w = rgba.w + imageRGBA.w;
+    return ;
+}
+
+__device__
+void myRenderPixel(const float4 &imageRGBA, const int &indexX, const int &indexY, const int &imageWidth) {
+    *(float4 *)(&cuConstRendererParams.imageData[4 * (indexY * imageWidth + indexX)]) = imageRGBA;
+    return ;
+}
 
 __global__ void kernelRenderPixels() {
     int indexX = threadIdx.x + blockDim.x * blockIdx.x;
@@ -695,27 +744,16 @@ __global__ void kernelRenderPixels() {
     if (indexX >= imageWidth || indexY >= imageHeight) {
         return ;
     }
-    float invWidth = 1.f / imageWidth;
-    float invHeight = 1.f / imageHeight;
+    float4 imageRGBA = *(float4 *)(&cuConstRendererParams.imageData[4 * (indexY * imageWidth + indexX)]);
+    __shared__ float4 shared_RGBA[1];
+    shared_RGBA[0] = imageRGBA;
+    float4 newRGBA;
 
-    float2 pixelCenterNorm = \
-        make_float2( \
-            invWidth * (static_cast<float>(indexX) + .5f), \
-            invHeight * (static_cast<float>(indexY) + .5f) \
-            );
     for (int circleIndex = 0; circleIndex < cuConstRendererParams.numberOfCircles; circleIndex++) {
-        // circlePos saving 2D position and radius.
-        float3 circlePos = make_float3( \
-            cuConstRendererParams.position[3 * circleIndex + 0], \
-            cuConstRendererParams.position[3 * circleIndex + 1], \
-            cuConstRendererParams.radius[circleIndex] \
-            );
-        if (isWithinCircle(pixelCenterNorm, circlePos)) {
-            float4 *imagePtr = (float4 *)(&cuConstRendererParams.imageData[4 * (indexY * imageWidth + indexX)]);
-            myShadePixel(circleIndex, pixelCenterNorm, imagePtr);
-        }
+        updateRGBA(cuConstRendererParams.sceneName, circleIndex, indexX, indexY, shared_RGBA[0], newRGBA);
+        shared_RGBA[0] = newRGBA;
     }
-
+    myRenderPixel(shared_RGBA[0], indexX, indexY, imageWidth);
     return ;
 }
 
@@ -730,8 +768,6 @@ void CudaRenderer::doRenderPixels() {
 
 void CudaRenderer::render() {
     // 256 threads per block is a healthy number
-    dim3 blockDim(256, 1);
-    dim3 gridDim((numberOfCircles + blockDim.x - 1) / blockDim.x);
 
     // doRenderCircles();
     
