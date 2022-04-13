@@ -687,7 +687,7 @@ __device__ void myShadePixel(const int &circleIndex, const float2 &pixelCenterNo
     return ;
 }
 __device__
-void updateRGBA(const SceneName &sceneName, const int &circleIndex, const int &indexX, const int &indexY, float4 &imageRGBA, float4 &newRGBA) {
+void updateRGBA(const SceneName &sceneName, const int &circleIndex, const int &indexX, const int &indexY, float4 &imageRGBA) {
     int index3 = 3 * circleIndex;
     float2 circleXY = make_float2(cuConstRendererParams.position[index3], cuConstRendererParams.position[index3+1]);
     float2 pixelCenterXY = \
@@ -702,7 +702,6 @@ void updateRGBA(const SceneName &sceneName, const int &circleIndex, const int &i
     float pixelDist = diffX * diffX + diffY * diffY;
     float rad = cuConstRendererParams.radius[circleIndex];
     if (pixelDist > rad*rad) {
-        newRGBA = imageRGBA;
         return;
     }
 
@@ -723,10 +722,12 @@ void updateRGBA(const SceneName &sceneName, const int &circleIndex, const int &i
     }
 
     float oneMinusAlpha = 1.f - alpha;
+    float4 newRGBA;
     newRGBA.x = alpha * rgb.x + oneMinusAlpha * imageRGBA.x;
     newRGBA.y = alpha * rgb.y + oneMinusAlpha * imageRGBA.y;
     newRGBA.z = alpha * rgb.z + oneMinusAlpha * imageRGBA.z;
     newRGBA.w = alpha + imageRGBA.w;
+    imageRGBA = newRGBA;
     return ;
 }
 
@@ -745,19 +746,10 @@ __global__ void kernelRenderPixels() {
         return ;
     }
     float4 imageRGBA = *(float4 *)(&cuConstRendererParams.imageData[4 * (indexY * imageWidth + indexX)]);
-    // __shared__ float4 shared_RGBA[1];
-    
-    // shared_RGBA[0] = imageRGBA;
-    float4 newRGBA;
 
     for (int circleIndex = 0; circleIndex < cuConstRendererParams.numberOfCircles; circleIndex++) {
-        // updateRGBA(cuConstRendererParams.sceneName, circleIndex, indexX, indexY, shared_RGBA[0], newRGBA);
-        updateRGBA(cuConstRendererParams.sceneName, circleIndex, indexX, indexY, imageRGBA, newRGBA);
-        imageRGBA = newRGBA;
-        // shared_RGBA[0] = newRGBA;
-
+        updateRGBA(cuConstRendererParams.sceneName, circleIndex, indexX, indexY, imageRGBA);
     }
-    // myRenderPixel(shared_RGBA[0], indexX, indexY, imageWidth);
     myRenderPixel(imageRGBA, indexX, indexY, imageWidth);
     return ;
 }
@@ -765,7 +757,7 @@ __global__ void kernelRenderPixels() {
 void CudaRenderer::doRenderPixels() {
     int imageWidth = image->width;
     int imageHeight = image->height;
-    dim3 blockDim(32, 32);
+    dim3 blockDim(8, 8);
     dim3 gridDim((imageWidth + blockDim.x -1) / blockDim.x, (imageHeight + blockDim.y - 1) / blockDim.y);
     kernelRenderPixels<<<gridDim, blockDim>>>();
     cudaDeviceSynchronize();

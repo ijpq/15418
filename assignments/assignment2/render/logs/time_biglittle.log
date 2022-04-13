@@ -12,9 +12,9 @@ WARNING: You're not running on a fast GPU, please consider using NVIDIA RTX 2080
 ---------------------------------------------------------
 
 Running benchmark, 4 frames, beginning at frame 0 ...
-Clear:    0.0479 ms
+Clear:    0.0480 ms
 Advance:  0.0008 ms
-Render:   9.2767 ms
-Total:    9.3255 ms
+Render:   10.4464 ms
+Total:    10.4952 ms
 
-Overall:  0.0377 sec (note units are seconds)
+Overall:  0.0424 sec (note units are seconds)
