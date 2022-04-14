@@ -69,7 +69,7 @@ uint warpScanExclusive(int threadIndex, uint idata, volatile uint *sScratch, uin
 }
 
 __inline__ __device__
-void sharedMemExclusiveScan(int threadIndex, uint *sInput, uint *sOutput,
+cudaError_t sharedMemExclusiveScan(int threadIndex, uint *sInput, uint *sOutput,
                             volatile uint *sScratch, uint size) {
     if (size > WARP_SIZE) {
         uint idata = sInput[threadIndex];
@@ -104,4 +104,5 @@ void sharedMemExclusiveScan(int threadIndex, uint *sInput, uint *sOutput,
         uint idata = sInput[threadIndex];
         sOutput[threadIndex] = warpScanExclusive(threadIndex, idata, sScratch, size);
     }
+    return cudaGetLastError();
 }
