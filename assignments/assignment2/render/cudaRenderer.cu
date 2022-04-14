@@ -825,9 +825,9 @@ __global__ void kernelRenderPixels(int *gridCirsPtr) {
     CHECK(cudaGetLastError());
     
     // 画布格内圆的数量决定了用多长的数组存圆的idx
-    int nrCirGrid = 0;
+    __shared__ int nrCirGrid[1];
     if (localTidx == blockDim.x * blockDim.y - 1) {
-        nrCirGrid = tidxNumCirsPrefixSum[localTidx] + nrCircleThread;
+        nrCirGrid[0] = tidxNumCirsPrefixSum[localTidx] + nrCircleThread;
     }
     __syncthreads();
     CHECK(cudaGetLastError());
@@ -850,7 +850,7 @@ __global__ void kernelRenderPixels(int *gridCirsPtr) {
             invWidth * (static_cast<float>(indexX) + .5f), \
             invHeight * (static_cast<float>(indexY) + .5f) \
             );
-    for (int localIdx = 0; localIdx < nrCirGrid; localIdx++) {
+    for (int localIdx = 0; localIdx < nrCirGrid[0]; localIdx++) {
         int circleIdx = gridCirIdx[localIdx];
         float3 circlePos = make_float3( \
             cuConstRendererParams.position[3 * circleIdx], \
