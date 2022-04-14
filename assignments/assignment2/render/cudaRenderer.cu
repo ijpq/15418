@@ -1,6 +1,9 @@
 #include <algorithm>
 #include <string>
 #define _USE_MATH_DEFINES
+#define THREADS_PER_BLOCK 16
+#define PIXEL_GRID_DIM 64
+#define SCAN_BLOCK_DIM 16*16
 #include <math.h>
 #include <stdio.h>
 #include <vector>
@@ -15,11 +18,24 @@
 #include "sceneLoader.h"
 #include "util.h"
 #include "renderAlongWithPixel.h"
+#include "exclusiveScan.cu_inl"
+#include "cudaError.cu_inl"
+#include <cstdint>
 
 #include <vector>
 #include <iostream>
 #include <ctime>
 
+
+#define CHECK(call)\
+{\
+    const cudaError_t error = call;\
+    if (error != cudaSuccess) {\
+        printf("Error: %s:%d, ", __FILE__, __LINE__);\
+        printf("code:%d, reason: %s\n",error, cudaGetErrorString(error));\
+        exit(-1);\
+    }\
+}
 ////////////////////////////////////////////////////////////////////////////////////////
 // All cuda kernels here
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -62,6 +78,7 @@ __constant__ float cuConstColorRamp[COLOR_MAP_SIZE][3];
 // file simpler and to seperate code that should not be modified
 #include "lookupColor.cu_inl"
 #include "noiseCuda.cu_inl"
+using namespace std;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -626,12 +643,6 @@ void CudaRenderer::advanceAnimation() {
 }
 
 
-
-
-
-
-
-
 __device__ __inline__ int isWithinCircle(const float2 &pixelCenterNorm, const float3 &circlePos) {
     float diffX = pixelCenterNorm.x - circlePos.x;
     float diffY = pixelCenterNorm.y - circlePos.y;
@@ -738,6 +749,7 @@ void myRenderPixel(const float4 &imageRGBA, const int &indexX, const int &indexY
 }
 
 __global__ void kernelRenderPixels() {
+    // 把线程映射到像素点，边界块中的多余线程可能不扔掉更好
     int indexX = threadIdx.x + blockDim.x * blockIdx.x;
     int indexY = threadIdx.y + blockDim.y * blockIdx.y;
     int imageWidth = cuConstRendererParams.imageWidth;
@@ -745,22 +757,107 @@ __global__ void kernelRenderPixels() {
     if (indexX >= imageWidth || indexY >= imageHeight) {
         return ;
     }
-    float4 imageRGBA = *(float4 *)(&cuConstRendererParams.imageData[4 * (indexY * imageWidth + indexX)]);
 
-    for (int circleIndex = 0; circleIndex < cuConstRendererParams.numberOfCircles; circleIndex++) {
-        updateRGBA(cuConstRendererParams.sceneName, circleIndex, indexX, indexY, imageRGBA);
+    // 计算画布格边界
+    int gridMinX = blockIdx.x * THREADS_PER_BLOCK;
+    int gridMinY = blockIdx.y * THREADS_PER_BLOCK;
+    int gridMaxX = min(gridMinX + THREADS_PER_BLOCK, imageWidth);
+    int gridMaxY = min(gridMinY + THREADS_PER_BLOCK, imageHeight);
+
+    // 设定块内线程，计算圆数
+    int localTidx = threadIdx.y * blockDim.y + threadIdx.x;
+    int circleRange = (cuConstRendererParams.numberOfCircles + THREADS_PER_BLOCK * THREADS_PER_BLOCK - 1) / (THREADS_PER_BLOCK * THREADS_PER_BLOCK);
+    int firstCircleIndex = localTidx * circleRange;
+    int lastCircleIndex = min(firstCircleIndex + circleRange, cuConstRendererParams.numberOfCircles);
+
+    // 当前线程负责的range中有多少个圆出现在的对应的grid中
+    uint nrCircleThread = 0;
+
+    // 圆id很大 32t
+    uint *cirIdxs = nullptr;
+    if (cudaError_t errCode = cudaMalloc(&cirIdxs, sizeof(uint) * circleRange)) {
+        printf("cuda malloc error\n");
+        return ;
     }
-    myRenderPixel(imageRGBA, indexX, indexY, imageWidth);
+
+    for (int cidx = firstCircleIndex; cidx < lastCircleIndex; cidx++) {
+        int index3 = cidx * 3;
+        float3 circlePos = make_float3( \
+            cuConstRendererParams.position[index3], \
+            cuConstRendererParams.position[index3+1], \
+            cuConstRendererParams.radius[cidx]);
+        short circleMinX = static_cast<short>(imageWidth * (circlePos.x - circlePos.z));
+        short circleMaxX = static_cast<short>(imageWidth * (circlePos.x + circlePos.z)) + 1; 
+        short circleMinY = static_cast<short>(imageHeight * (circlePos.y - circlePos.z));
+        short circleMaxY = static_cast<short>(imageHeight * (circlePos.y + circlePos.z)) + 1;
+        if (circleMinX >= gridMaxX || \
+            circleMaxX < gridMinX || \
+            circleMinY >= gridMaxY || \
+            circleMaxY < gridMinY) {
+            continue;
+        }
+        // arr记录圆id
+        cirIdxs[nrCircleThread++] = cidx;
+    }
+
+    // parallel prefix sum
+    // 每个线程负责圆数量
+    __shared__ uint tidxNumCirs[THREADS_PER_BLOCK * THREADS_PER_BLOCK];
+    // 前缀和后，画布格里可能包含全部圆，32t
+    __shared__ uint tidxNumCirsPrefixSum[THREADS_PER_BLOCK * THREADS_PER_BLOCK];
+    __shared__ uint prefixSumArr[THREADS_PER_BLOCK * THREADS_PER_BLOCK * 2];
+    // arr记录圆数量
+    tidxNumCirs[localTidx] = nrCircleThread;
+    // 块内同步，也是画布格同步，准备前缀和数组
+    __syncthreads();
+    sharedMemExclusiveScan(localTidx, tidxNumCirs, tidxNumCirsPrefixSum, prefixSumArr, THREADS_PER_BLOCK*THREADS_PER_BLOCK);
+    // 同步，取得前缀和数组
+    __syncthreads();
+    
+
+    // 画布格内圆的数量决定了用多长的数组存圆的idx
+    int nrCirGrid = 0;
+    if (localTidx == THREADS_PER_BLOCK * THREADS_PER_BLOCK - 1) {
+        nrCirGrid = tidxNumCirsPrefixSum[localTidx] + nrCircleThread;
+    }
+    __syncthreads();
+    // 画布格内圆id
+    __shared__ uint gridCirIdx[100*1000];
+    for (int i = 0; i < nrCircleThread; i++) {
+        gridCirIdx[i + tidxNumCirsPrefixSum[localTidx]] = cirIdxs[i];
+    }
+    __syncthreads();
+    cudaFree(cirIdxs);
+    
+    float invWidth = 1.f / imageWidth;
+    float invHeight = 1.f / imageHeight;
+    float2 pixelCenterNorm = \
+        make_float2( \
+            invWidth * (static_cast<float>(indexX) + .5f), \
+            invHeight * (static_cast<float>(indexY) + .5f) \
+            );
+    for (int circleIndex = 0; circleIndex < nrCirGrid; circleIndex++) {
+        float3 circlePos = make_float3( \
+            cuConstRendererParams.position[3 * gridCirIdx[circleIndex]], \
+            cuConstRendererParams.position[3 * gridCirIdx[circleIndex] + 1], \
+            cuConstRendererParams.radius[gridCirIdx[circleIndex]]);
+        if (isWithinCircle(pixelCenterNorm, circlePos)) {
+            float4 *imagePtr = (float4 *)(&cuConstRendererParams.imageData[4 * (indexY * imageWidth + indexX)]);
+            myShadePixel(gridCirIdx[circleIndex], pixelCenterNorm, imagePtr);
+        }
+    }
+
+
     return ;
 }
 
 void CudaRenderer::doRenderPixels() {
     int imageWidth = image->width;
     int imageHeight = image->height;
-    dim3 blockDim(8, 8);
-    dim3 gridDim((imageWidth + blockDim.x -1) / blockDim.x, (imageHeight + blockDim.y - 1) / blockDim.y);
+    dim3 blockDim(THREADS_PER_BLOCK, THREADS_PER_BLOCK);
+    dim3 gridDim((imageWidth + THREADS_PER_BLOCK -1) / THREADS_PER_BLOCK, (imageHeight + THREADS_PER_BLOCK - 1) / THREADS_PER_BLOCK);
     kernelRenderPixels<<<gridDim, blockDim>>>();
-    cudaDeviceSynchronize();
+    CHECK(cudaDeviceSynchronize());
 }
 
 void CudaRenderer::render() {
